@@ -19,7 +19,7 @@ public class Della {
 
         String command = "";
         Scanner s = new Scanner(System.in);
-        ArrayList<String> tasks = new ArrayList<>();
+        ArrayList<Task> tasks = new ArrayList<>();
 
         while (true) {
             command = s.nextLine();
@@ -34,9 +34,10 @@ public class Della {
                 }
                 System.out.println("    ----------------------------------------");
             } else { // if just adding tasks
-                tasks.add(command);
+                Task newTask = new Task(command);
+                tasks.add(newTask);
                 System.out.println("    ----------------------------------------");
-                System.out.printf("    added: %s\n", command);
+                System.out.printf("    added: %s\n", newTask);
                 System.out.println("    ----------------------------------------");
             }
         }
