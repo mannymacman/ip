@@ -103,6 +103,20 @@ public class Della {
                 System.out.printf("       %s\n", newTask);
                 System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
                 System.out.println("    ----------------------------------------");
+            } else if (command.equals("event")) {
+                String content = inputParts[1];
+                String[] contentParts = content.split(" /from ");
+                String taskName = contentParts[0];
+                String[] timeParts = contentParts[1].split(" /to ");
+                String from = timeParts[0];
+                String to = timeParts[1];
+                Task newTask = new Event(taskName, from, to);
+                tasks.add(newTask);
+                System.out.println("    ----------------------------------------");
+                System.out.println("     Got it. I've added this task:");
+                System.out.printf("       %s\n", newTask);
+                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                System.out.println("    ----------------------------------------");
             }
         }
         s.close();
