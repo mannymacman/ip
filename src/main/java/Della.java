@@ -83,7 +83,7 @@ public class Della {
                         System.out.println("    ----------------------------------------");
                     }
                 } else { // if just adding tasks
-                    Task newTask = new Task(command);
+                    Task newTask = new Todo(command);
                     tasks.add(newTask);
                     System.out.println("    ----------------------------------------");
                     System.out.printf("    added: %s\n", newTask);
