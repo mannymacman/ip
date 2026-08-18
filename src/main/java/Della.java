@@ -84,11 +84,14 @@ public class Della {
                     System.out.println("    Invalid task provided. Please try again!");
                     System.out.println("    ----------------------------------------");
                 }
-            } else { // if just adding tasks
-                Task newTask = new Todo(command);
+            } else if (command.equals("todo")) {
+                String content = inputParts[1];
+                Task newTask = new Todo(content);
                 tasks.add(newTask);
                 System.out.println("    ----------------------------------------");
-                System.out.printf("    added: %s\n", newTask);
+                System.out.println("     Got it. I've added this task:");
+                System.out.printf("       %s\n", newTask);
+                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
                 System.out.println("    ----------------------------------------");
             }
         }
