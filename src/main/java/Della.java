@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Della {
     public static void main(String[] args) {
@@ -18,18 +19,26 @@ public class Della {
 
         String command = "";
         Scanner s = new Scanner(System.in);
+        ArrayList<String> tasks = new ArrayList<>();
+
         while (true) {
             command = s.nextLine();
 
             // exit when bye command given
             if (command.equals("bye")) {
                 break;
+            } else if (command.equals("list")) {
+                System.out.println("    ----------------------------------------");
+                for (int i = 0; i < tasks.size(); i++) {
+                    System.out.printf("    %d. %s\n", i + 1, tasks.get(i));
+                }
+                System.out.println("    ----------------------------------------");
+            } else { // if just adding tasks
+                tasks.add(command);
+                System.out.println("    ----------------------------------------");
+                System.out.printf("    added: %s\n", command);
+                System.out.println("    ----------------------------------------");
             }
-
-            // echo command
-            System.out.println("    ----------------------------------------");
-            System.out.println("    " + command);
-            System.out.println("    ----------------------------------------");
         }
         s.close();
         System.out.println("========================================");
