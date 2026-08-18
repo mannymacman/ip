@@ -93,6 +93,16 @@ public class Della {
                 System.out.printf("       %s\n", newTask);
                 System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
                 System.out.println("    ----------------------------------------");
+            } else if (command.equals("deadline")) {
+                String content = inputParts[1];
+                String[] contentParts = content.split(" /by ");
+                Task newTask = new Deadline(contentParts[0], contentParts[1]);
+                tasks.add(newTask);
+                System.out.println("    ----------------------------------------");
+                System.out.println("     Got it. I've added this task:");
+                System.out.printf("       %s\n", newTask);
+                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                System.out.println("    ----------------------------------------");
             }
         }
         s.close();
