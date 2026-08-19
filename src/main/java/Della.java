@@ -26,18 +26,31 @@ public class Della {
 
 
             String[] inputParts = input.split("\\s+", 2);
-            String command = inputParts[0];
+
+            Command command;
+
+            switch (inputParts[0]) {
+                case "bye" -> command = Command.BYE;
+                case "list" -> command = Command.LIST;
+                case "mark" -> command = Command.MARK;
+                case "unmark" -> command = Command.UNMARK;
+                case "todo" -> command = Command.TODO;
+                case "deadline" -> command = Command.DEADLINE;
+                case "event" -> command = Command.EVENT;
+                case "delete" -> command = Command.DELETE;
+                default -> command = Command.UNKNOWN;
+            }
 
             // exit when bye command given
-            if (command.equals("bye")) {
+            if (command == Command.BYE) {
                 break;
-            } else if (command.equals("list")) {
+            } else if (command == Command.LIST) {
                 System.out.println("    ----------------------------------------");
                 for (int i = 0; i < tasks.size(); i++) {
                     System.out.printf("    %d. %s\n", i + 1, tasks.get(i));
                 }
                 System.out.println("    ----------------------------------------");
-            } else if (command.equals("mark")) {
+            } else if (command == Command.MARK) {
                 // mark task
                 try {
                     String content = inputParts[1];
@@ -64,7 +77,7 @@ public class Della {
                     System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
                     System.out.println("    ----------------------------------------");
                 }
-            } else if (command.equals("unmark")) {
+            } else if (command == Command.UNMARK) {
                 // unmark task
                 try {
                     String content = inputParts[1];
@@ -91,7 +104,7 @@ public class Della {
                     System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
                     System.out.println("    ----------------------------------------");
                 }
-            } else if (command.equals("todo")) {
+            } else if (command == Command.TODO) {
                 try {
                     String content = inputParts[1];
                     if (content.isEmpty()) {
@@ -116,7 +129,7 @@ public class Della {
                     System.out.println("    Bro, cannot add empty todo");
                     System.out.println("    ----------------------------------------");
                 }
-            } else if (command.equals("deadline")) {
+            } else if (command == Command.DEADLINE) {
                 try {
                     String content = inputParts[1];
                     if (content.isEmpty()) {
@@ -149,7 +162,7 @@ public class Della {
                     System.out.println("    Bro, cannot add empty deadline");
                     System.out.println("    ----------------------------------------");
                 }
-            } else if (command.equals("event")) {
+            } else if (command == Command.EVENT) {
                 try {
                     String content = inputParts[1];
                     if (content.isEmpty()) {
@@ -191,7 +204,7 @@ public class Della {
                     System.out.println("    Bro, cannot add empty event");
                     System.out.println("    ----------------------------------------");
                 }
-            } else if (command.equals("delete")) {
+            } else if (command == Command.DELETE) {
                 // unmark task
                 try {
                     String content = inputParts[1];
