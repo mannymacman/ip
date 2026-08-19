@@ -38,27 +38,30 @@ public class Della {
                 }
                 System.out.println("    ----------------------------------------");
             } else if (command.equals("mark")) {
-                String content = inputParts[1];
                 // mark task
                 try {
+                    String content = inputParts[1];
                     int taskNum = Integer.parseInt(content);
-
-                    // check if task is within the number of tasks provided
-                    if (taskNum > 0 && taskNum <= tasks.size()) {
-                        Task task = tasks.get(taskNum - 1);
-                        task.mark();
-                        System.out.println("    ----------------------------------------");
-                        System.out.println("    Nice! I have marked this task as done:");
-                        System.out.println("      marked: " + task);
-                        System.out.println("    ----------------------------------------");
-                    } else {
-                        System.out.println("    ----------------------------------------");
-                        System.out.println("    Invalid task provided. Please try again!");
-                        System.out.println("    ----------------------------------------");
-                    }
-                } catch (NumberFormatException e) {
+                    Task task = tasks.get(taskNum - 1);
+                    task.mark();
                     System.out.println("    ----------------------------------------");
-                    System.out.println("    Invalid task provided. Please try again!");
+                    System.out.println("    Nice! I have marked this task as done:");
+                    System.out.println("      marked: " + task);
+                    System.out.println("    ----------------------------------------");
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // checks if a task number is provided
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Cannot mark empty task");
+                    System.out.println("    ----------------------------------------");
+                } catch (NumberFormatException e) {
+                    // checks if mark command is followed by valid int i.e. 1 and not one
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Enter a valid task number. eg mark 1");
+                    System.out.println("    ----------------------------------------");
+                } catch (IndexOutOfBoundsException e) {
+                    // checks if task number provided is within the number of tasks user actually has
+                    System.out.println("    ----------------------------------------");
+                    System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
                     System.out.println("    ----------------------------------------");
                 }
             } else if (command.equals("unmark")) {
