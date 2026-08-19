@@ -150,19 +150,47 @@ public class Della {
                     System.out.println("    ----------------------------------------");
                 }
             } else if (command.equals("event")) {
-                String content = inputParts[1];
-                String[] contentParts = content.split(" /from ");
-                String taskName = contentParts[0];
-                String[] timeParts = contentParts[1].split(" /to ");
-                String from = timeParts[0];
-                String to = timeParts[1];
-                Task newTask = new Event(taskName, from, to);
-                tasks.add(newTask);
-                System.out.println("    ----------------------------------------");
-                System.out.println("     Got it. I've added this task:");
-                System.out.printf("       %s\n", newTask);
-                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                System.out.println("    ----------------------------------------");
+                try {
+                    String content = inputParts[1];
+                    if (content.isEmpty()) {
+                        // catches if content is empty
+                        // eg. user enters "event  " with trailing blank spaces
+                        System.out.println("    ----------------------------------------");
+                        System.out.println("    Bro, cannot add empty event");
+                        System.out.println("    ----------------------------------------");
+                    } else {
+                        String[] contentParts = content.split("\\s+/from\\s+");
+                        if (contentParts.length == 1) {
+                            System.out.println("    ----------------------------------------");
+                            System.out.println("    Missing or invalid /from command. Pls try again");
+                            System.out.println("    ----------------------------------------");
+                        } else {
+                            String taskName = contentParts[0];
+                            String[] timeParts = contentParts[1].split("\\s+/to\\s+");
+                            if (timeParts.length == 1) {
+                                System.out.println("    ----------------------------------------");
+                                System.out.println("    Missing or invalid /to command. Pls try again");
+                                System.out.println("    ----------------------------------------");
+                            } else {
+                                String from = timeParts[0];
+                                String to = timeParts[1];
+                                Task newTask = new Event(taskName, from, to);
+                                tasks.add(newTask);
+                                System.out.println("    ----------------------------------------");
+                                System.out.println("     Got it. I've added this task:");
+                                System.out.printf("       %s\n", newTask);
+                                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                                System.out.println("    ----------------------------------------");
+                            }
+                        }
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // catches if content is empty
+                    // eg. user enters "event" with no blank spaces
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Bro, cannot add empty event");
+                    System.out.println("    ----------------------------------------");
+                }
             } else {
                 // handles invalid and empty commands
                 System.out.println("    ----------------------------------------");
