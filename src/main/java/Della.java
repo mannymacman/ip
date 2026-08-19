@@ -1,5 +1,4 @@
-import java.util.Scanner;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Della {
     public static void main(String[] args) {
@@ -17,12 +16,14 @@ public class Della {
         System.out.println(greeting);
         System.out.println("========================================");
 
-        String input = "";
         Scanner s = new Scanner(System.in);
-        ArrayList<Task> tasks = new ArrayList<>();
+
+        String input = ""; // stores user input from scanner
+        ArrayList<Task> tasks = new ArrayList<>(); // stores created tasks
 
         while (true) {
             input = s.nextLine();
+
 
             String[] inputParts = input.split(" ", 2);
             String command = inputParts[0];
@@ -116,6 +117,11 @@ public class Della {
                 System.out.println("     Got it. I've added this task:");
                 System.out.printf("       %s\n", newTask);
                 System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                System.out.println("    ----------------------------------------");
+            } else {
+                // handles invalid and empty commands
+                System.out.println("    ----------------------------------------");
+                System.out.println("    I don't recognise this command :( Try again pls tyvm");
                 System.out.println("    ----------------------------------------");
             }
         }
