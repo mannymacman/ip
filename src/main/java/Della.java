@@ -117,15 +117,38 @@ public class Della {
                     System.out.println("    ----------------------------------------");
                 }
             } else if (command.equals("deadline")) {
-                String content = inputParts[1];
-                String[] contentParts = content.split(" /by ");
-                Task newTask = new Deadline(contentParts[0], contentParts[1]);
-                tasks.add(newTask);
-                System.out.println("    ----------------------------------------");
-                System.out.println("     Got it. I've added this task:");
-                System.out.printf("       %s\n", newTask);
-                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                System.out.println("    ----------------------------------------");
+                try {
+                    String content = inputParts[1];
+                    if (content.isEmpty()) {
+                        // catches if content is empty
+                        // eg. user enters "deadline  " with trailing blank spaces
+                        System.out.println("    ----------------------------------------");
+                        System.out.println("    Bro, cannot add empty deadline");
+                        System.out.println("    ----------------------------------------");
+                    } else {
+                        String[] contentParts = content.split("\\s+/by\\s+");
+                        // checks if user has entered valid /by command i.e. /by sunday
+                        if (contentParts.length == 1) {
+                            System.out.println("    ----------------------------------------");
+                            System.out.println("    Missing or invalid /by command. Pls try again");
+                            System.out.println("    ----------------------------------------");
+                        } else {
+                            Task newTask = new Deadline(contentParts[0], contentParts[1]);
+                            tasks.add(newTask);
+                            System.out.println("    ----------------------------------------");
+                            System.out.println("     Got it. I've added this task:");
+                            System.out.printf("       %s\n", newTask);
+                            System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                            System.out.println("    ----------------------------------------");
+                        }
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // catches if content is empty
+                    // eg. user enters "deadline" with no blank spaces
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Bro, cannot add empty deadline");
+                    System.out.println("    ----------------------------------------");
+                }
             } else if (command.equals("event")) {
                 String content = inputParts[1];
                 String[] contentParts = content.split(" /from ");
