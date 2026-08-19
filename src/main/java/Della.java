@@ -25,7 +25,7 @@ public class Della {
             input = s.nextLine();
 
 
-            String[] inputParts = input.split(" ", 2);
+            String[] inputParts = input.split("\\s+", 2);
             String command = inputParts[0];
 
             // exit when bye command given
@@ -86,14 +86,30 @@ public class Della {
                     System.out.println("    ----------------------------------------");
                 }
             } else if (command.equals("todo")) {
-                String content = inputParts[1];
-                Task newTask = new Todo(content);
-                tasks.add(newTask);
-                System.out.println("    ----------------------------------------");
-                System.out.println("     Got it. I've added this task:");
-                System.out.printf("       %s\n", newTask);
-                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                System.out.println("    ----------------------------------------");
+                try {
+                    String content = inputParts[1];
+                    if (content.isEmpty()) {
+                        // catches if content is empty
+                        // eg. user enters "todo  " with trailing blank spaces
+                        System.out.println("    ----------------------------------------");
+                        System.out.println("    Bro, cannot add empty todo");
+                        System.out.println("    ----------------------------------------");
+                    } else {
+                        Task newTask = new Todo(content);
+                        tasks.add(newTask);
+                        System.out.println("    ----------------------------------------");
+                        System.out.println("     Got it. I've added this task:");
+                        System.out.printf("       %s\n", newTask);
+                        System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                        System.out.println("    ----------------------------------------");
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // catches if content is empty
+                    // eg. user enters "todo" with no blank spaces
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Bro, cannot add empty todo");
+                    System.out.println("    ----------------------------------------");
+                }
             } else if (command.equals("deadline")) {
                 String content = inputParts[1];
                 String[] contentParts = content.split(" /by ");
