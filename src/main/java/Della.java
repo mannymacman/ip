@@ -191,6 +191,34 @@ public class Della {
                     System.out.println("    Bro, cannot add empty event");
                     System.out.println("    ----------------------------------------");
                 }
+            } else if (command.equals("delete")) {
+                // unmark task
+                try {
+                    String content = inputParts[1];
+                    int taskNum = Integer.parseInt(content);
+                    Task task = tasks.get(taskNum - 1);
+                    tasks.remove(taskNum - 1);
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Noted. I've removed this task:");
+                    System.out.println("      " + task);
+                    System.out.printf("    Now you have %d tasks in the list.\n", tasks.size());
+                    System.out.println("    ----------------------------------------");
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // checks if a task number is provided
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Cannot delete empty task");
+                    System.out.println("    ----------------------------------------");
+                } catch (NumberFormatException e) {
+                    // checks if delete command is followed by valid int i.e. 1 and not one
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Enter a valid task number. eg delete 1");
+                    System.out.println("    ----------------------------------------");
+                } catch (IndexOutOfBoundsException e) {
+                    // checks if task number provided is within the number of tasks user actually has
+                    System.out.println("    ----------------------------------------");
+                    System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
+                    System.out.println("    ----------------------------------------");
+                }
             } else {
                 // handles invalid and empty commands
                 System.out.println("    ----------------------------------------");
