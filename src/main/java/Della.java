@@ -85,6 +85,7 @@ public class Della {
                     String content = inputParts[1];
                     int taskNum = Integer.parseInt(content);
                     Task task = tasks.get(taskNum - 1);
+
                     task.unmark();
                     System.out.println("    ----------------------------------------");
                     System.out.println("    OK, I've marked this task as not done yet:");
@@ -119,6 +120,7 @@ public class Della {
                         Task newTask = new Todo(content);
                         try {
                             Storage.storeTask(newTask);
+                            tasks.add(newTask);
                             System.out.println("    ----------------------------------------");
                             System.out.println("     Got it. I've added this task:");
                             System.out.printf("       %s\n", newTask);
