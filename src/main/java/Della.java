@@ -157,12 +157,19 @@ public class Della {
                             System.out.println("    ----------------------------------------");
                         } else {
                             Task newTask = new Deadline(contentParts[0], contentParts[1]);
-                            tasks.add(newTask);
-                            System.out.println("    ----------------------------------------");
-                            System.out.println("     Got it. I've added this task:");
-                            System.out.printf("       %s\n", newTask);
-                            System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                            System.out.println("    ----------------------------------------");
+                            try {
+                                Storage.storeTask(newTask);
+                                tasks.add(newTask);
+                                System.out.println("    ----------------------------------------");
+                                System.out.println("     Got it. I've added this task:");
+                                System.out.printf("       %s\n", newTask);
+                                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                                System.out.println("    ----------------------------------------");
+                            } catch (IOException e) {
+                                System.out.println("    ----------------------------------------");
+                                System.out.println("    Error when storing task");
+                                System.out.println("    ----------------------------------------");
+                            }
                         }
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -198,12 +205,19 @@ public class Della {
                                 String from = timeParts[0];
                                 String to = timeParts[1];
                                 Task newTask = new Event(taskName, from, to);
-                                tasks.add(newTask);
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("     Got it. I've added this task:");
-                                System.out.printf("       %s\n", newTask);
-                                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                                System.out.println("    ----------------------------------------");
+                                try {
+                                    Storage.storeTask(newTask);
+                                    tasks.add(newTask);
+                                    System.out.println("    ----------------------------------------");
+                                    System.out.println("     Got it. I've added this task:");
+                                    System.out.printf("       %s\n", newTask);
+                                    System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                                    System.out.println("    ----------------------------------------");
+                                } catch (IOException e) {
+                                    System.out.println("    ----------------------------------------");
+                                    System.out.println("    Error when storing task");
+                                    System.out.println("    ----------------------------------------");
+                                }
                             }
                         }
                     }
