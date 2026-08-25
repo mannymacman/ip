@@ -22,3 +22,8 @@ _temp/
 text-ui-test/EXPECTED-UNIX.TXT
 
 *.class
+
+data/della.txt
+
+# Run experiments
+Test.java

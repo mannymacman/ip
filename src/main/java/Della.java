@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -20,7 +22,20 @@ public class Della {
         Scanner s = new Scanner(System.in);
 
         String input = ""; // stores user input from scanner
-        ArrayList<Task> tasks = new ArrayList<>(); // stores created tasks
+        ArrayList<Task> tasks; // stores created tasks
+
+        if (Storage.hasData()) {
+            try {
+                tasks = Storage.loadTasks();
+            } catch (FileNotFoundException e) {
+                System.out.println("    ----------------------------------------");
+                System.out.println("    Error loading tasks");
+                System.out.println("    ----------------------------------------");
+                tasks = new ArrayList<>();
+            }
+        } else {
+            tasks = new ArrayList<>();
+        }
 
         while (true) {
             input = s.nextLine();
@@ -58,6 +73,7 @@ public class Della {
                     int taskNum = Integer.parseInt(content);
                     Task task = tasks.get(taskNum - 1);
                     task.mark();
+                    Storage.updateTaskStatus(taskNum, task);
                     System.out.println("    ----------------------------------------");
                     System.out.println("    Nice! I have marked this task as done:");
                     System.out.println("      marked: " + task);
@@ -77,6 +93,10 @@ public class Della {
                     System.out.println("    ----------------------------------------");
                     System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
                     System.out.println("    ----------------------------------------");
+                } catch (IOException e) {
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Error in updating task in storage");
+                    System.out.println("    ----------------------------------------");
                 }
             } else if (command == Command.UNMARK) {
                 // unmark task
@@ -85,6 +105,7 @@ public class Della {
                     int taskNum = Integer.parseInt(content);
                     Task task = tasks.get(taskNum - 1);
                     task.unmark();
+                    Storage.updateTaskStatus(taskNum, task);
                     System.out.println("    ----------------------------------------");
                     System.out.println("    OK, I've marked this task as not done yet:");
                     System.out.println("      unmarked: " + task);
@@ -104,6 +125,10 @@ public class Della {
                     System.out.println("    ----------------------------------------");
                     System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
                     System.out.println("    ----------------------------------------");
+                } catch (IOException e) {
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Error in updating task in storage");
+                    System.out.println("    ----------------------------------------");
                 }
             } else if (command == Command.TODO) {
                 try {
@@ -116,12 +141,19 @@ public class Della {
                         System.out.println("    ----------------------------------------");
                     } else {
                         Task newTask = new Todo(content);
-                        tasks.add(newTask);
-                        System.out.println("    ----------------------------------------");
-                        System.out.println("     Got it. I've added this task:");
-                        System.out.printf("       %s\n", newTask);
-                        System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                        System.out.println("    ----------------------------------------");
+                        try {
+                            Storage.storeTask(newTask);
+                            tasks.add(newTask);
+                            System.out.println("    ----------------------------------------");
+                            System.out.println("     Got it. I've added this task:");
+                            System.out.printf("       %s\n", newTask);
+                            System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                            System.out.println("    ----------------------------------------");
+                        } catch (IOException e) {
+                            System.out.println("    ----------------------------------------");
+                            System.out.println("    Error when storing task");
+                            System.out.println("    ----------------------------------------");
+                        }
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // catches if content is empty
@@ -148,12 +180,19 @@ public class Della {
                             System.out.println("    ----------------------------------------");
                         } else {
                             Task newTask = new Deadline(contentParts[0], contentParts[1]);
-                            tasks.add(newTask);
-                            System.out.println("    ----------------------------------------");
-                            System.out.println("     Got it. I've added this task:");
-                            System.out.printf("       %s\n", newTask);
-                            System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                            System.out.println("    ----------------------------------------");
+                            try {
+                                Storage.storeTask(newTask);
+                                tasks.add(newTask);
+                                System.out.println("    ----------------------------------------");
+                                System.out.println("     Got it. I've added this task:");
+                                System.out.printf("       %s\n", newTask);
+                                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                                System.out.println("    ----------------------------------------");
+                            } catch (IOException e) {
+                                System.out.println("    ----------------------------------------");
+                                System.out.println("    Error when storing task");
+                                System.out.println("    ----------------------------------------");
+                            }
                         }
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -189,12 +228,19 @@ public class Della {
                                 String from = timeParts[0];
                                 String to = timeParts[1];
                                 Task newTask = new Event(taskName, from, to);
-                                tasks.add(newTask);
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("     Got it. I've added this task:");
-                                System.out.printf("       %s\n", newTask);
-                                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                                System.out.println("    ----------------------------------------");
+                                try {
+                                    Storage.storeTask(newTask);
+                                    tasks.add(newTask);
+                                    System.out.println("    ----------------------------------------");
+                                    System.out.println("     Got it. I've added this task:");
+                                    System.out.printf("       %s\n", newTask);
+                                    System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                                    System.out.println("    ----------------------------------------");
+                                } catch (IOException e) {
+                                    System.out.println("    ----------------------------------------");
+                                    System.out.println("    Error when storing task");
+                                    System.out.println("    ----------------------------------------");
+                                }
                             }
                         }
                     }
@@ -212,6 +258,7 @@ public class Della {
                     int taskNum = Integer.parseInt(content);
                     Task task = tasks.get(taskNum - 1);
                     tasks.remove(taskNum - 1);
+                    Storage.deleteTask(taskNum);
                     System.out.println("    ----------------------------------------");
                     System.out.println("    Noted. I've removed this task:");
                     System.out.println("      " + task);
@@ -231,6 +278,10 @@ public class Della {
                     // checks if task number provided is within the number of tasks user actually has
                     System.out.println("    ----------------------------------------");
                     System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
+                    System.out.println("    ----------------------------------------");
+                } catch (IOException e) {
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Error in deleting task in storage");
                     System.out.println("    ----------------------------------------");
                 }
             } else {
