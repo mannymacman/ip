@@ -1,6 +1,6 @@
 public abstract class Task {
-    private String name;
-    private boolean isDone = false;
+    protected String name;
+    protected boolean isDone = false;
 
     public Task(String name) {
         this.name = name;
@@ -13,6 +13,8 @@ public abstract class Task {
     public void unmark() {
         this.isDone = false;
     }
+
+    public abstract String formatForStorage();
 
     @Override
     public String toString() {
