@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -21,7 +22,20 @@ public class Della {
         Scanner s = new Scanner(System.in);
 
         String input = ""; // stores user input from scanner
-        ArrayList<Task> tasks = new ArrayList<>(); // stores created tasks
+        ArrayList<Task> tasks; // stores created tasks
+
+        if (Storage.hasData()) {
+            try {
+                tasks = Storage.loadTasks();
+            } catch (FileNotFoundException e) {
+                System.out.println("    ----------------------------------------");
+                System.out.println("    Error loading tasks");
+                System.out.println("    ----------------------------------------");
+                tasks = new ArrayList<>();
+            }
+        } else {
+            tasks = new ArrayList<>();
+        }
 
         while (true) {
             input = s.nextLine();

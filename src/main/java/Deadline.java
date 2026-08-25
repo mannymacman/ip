@@ -6,6 +6,12 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    public Deadline(String name, boolean isDone, String by) {
+        super(name);
+        this.isDone = isDone;
+        this.by = by;
+    }
+
     @Override
     public String formatForStorage() {
         return String.format("%s|%s|%s|%s", "D", super.isDone ? "1" : "0", this.name, this.by);

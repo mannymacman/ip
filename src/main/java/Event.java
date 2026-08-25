@@ -8,6 +8,13 @@ public class Event extends Task {
         this.to = to;
     }
 
+    public Event(String name, boolean isDone, String from, String to) {
+        super(name);
+        this.isDone = isDone;
+        this.from = from;
+        this.to = to;
+    }
+
     @Override
     public String formatForStorage() {
         return String.format("%s|%s|%s|%s|%s", "E", super.isDone ? "1" : "0", this.name, this.from, this.to);
