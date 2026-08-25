@@ -48,4 +48,12 @@ public class Storage {
         taskLines.set(lineIndex, task.formatForStorage());
         Files.write(filePath, taskLines);
     }
+
+    public static void deleteTask(int taskNum) throws IOException {
+        Path filePath = Path.of("./data/della.txt");
+        List<String> taskLines = Files.readAllLines(filePath);
+        int lineIndex = taskNum - 1;
+        taskLines.remove(lineIndex);
+        Files.write(filePath, taskLines);
+    }
 }

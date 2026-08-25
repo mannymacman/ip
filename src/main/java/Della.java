@@ -258,6 +258,7 @@ public class Della {
                     int taskNum = Integer.parseInt(content);
                     Task task = tasks.get(taskNum - 1);
                     tasks.remove(taskNum - 1);
+                    Storage.deleteTask(taskNum);
                     System.out.println("    ----------------------------------------");
                     System.out.println("    Noted. I've removed this task:");
                     System.out.println("      " + task);
@@ -277,6 +278,10 @@ public class Della {
                     // checks if task number provided is within the number of tasks user actually has
                     System.out.println("    ----------------------------------------");
                     System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
+                    System.out.println("    ----------------------------------------");
+                } catch (IOException e) {
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Error in deleting task in storage");
                     System.out.println("    ----------------------------------------");
                 }
             } else {
