@@ -4,6 +4,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 public class Storage {
     public static void storeTask(Task task) throws IOException {
@@ -36,5 +39,13 @@ public class Storage {
         }
 
         return tasks;
+    }
+
+    public static void updateTaskStatus(int taskNum, Task task) throws IOException {
+        Path filePath = Path.of("./data/della.txt");
+        List<String> taskLines = Files.readAllLines(filePath);
+        int lineIndex = taskNum - 1;
+        taskLines.set(lineIndex, task.formatForStorage());
+        Files.write(filePath, taskLines);
     }
 }

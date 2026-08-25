@@ -73,6 +73,7 @@ public class Della {
                     int taskNum = Integer.parseInt(content);
                     Task task = tasks.get(taskNum - 1);
                     task.mark();
+                    Storage.updateTaskStatus(taskNum, task);
                     System.out.println("    ----------------------------------------");
                     System.out.println("    Nice! I have marked this task as done:");
                     System.out.println("      marked: " + task);
@@ -92,6 +93,10 @@ public class Della {
                     System.out.println("    ----------------------------------------");
                     System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
                     System.out.println("    ----------------------------------------");
+                } catch (IOException e) {
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Error in updating task in storage");
+                    System.out.println("    ----------------------------------------");
                 }
             } else if (command == Command.UNMARK) {
                 // unmark task
@@ -99,8 +104,8 @@ public class Della {
                     String content = inputParts[1];
                     int taskNum = Integer.parseInt(content);
                     Task task = tasks.get(taskNum - 1);
-
                     task.unmark();
+                    Storage.updateTaskStatus(taskNum, task);
                     System.out.println("    ----------------------------------------");
                     System.out.println("    OK, I've marked this task as not done yet:");
                     System.out.println("      unmarked: " + task);
@@ -119,6 +124,10 @@ public class Della {
                     // checks if task number provided is within the number of tasks user actually has
                     System.out.println("    ----------------------------------------");
                     System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
+                    System.out.println("    ----------------------------------------");
+                } catch (IOException e) {
+                    System.out.println("    ----------------------------------------");
+                    System.out.println("    Error in updating task in storage");
                     System.out.println("    ----------------------------------------");
                 }
             } else if (command == Command.TODO) {
