@@ -24,3 +24,17 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Creating and running the JAR file
+
+From the project root, create the runnable fat JAR with:
+
+```powershell
+.\gradlew.bat shadowJar
+```
+
+Gradle places the generated file at `build\libs\della.jar`. Run it with Java 25:
+
+```powershell
+java -jar build\libs\della.jar
+```
