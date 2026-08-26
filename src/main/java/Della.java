@@ -7,19 +7,8 @@ import java.util.ArrayList;
 
 public class Della {
     public static void main(String[] args) {
-        String banner =
-                "   DDDD   eeee  l      l       aaaa\n" +
-                "   D   D  e     l      l      a    a\n" +
-                "   D   D  eee   l      l      aaaaaa\n" +
-                "   D   D  e     l      l      a    a\n" +
-                "   DDDD   eeee  llll   llll   a    a";
-        String greeting = "Hi! I'm Della :))\nHow can I help you?";
-        String farewell = "Byee! Rest well!";
 
-        System.out.println(banner);
-        System.out.println("========================================");
-        System.out.println(greeting);
-        System.out.println("========================================");
+        UI.showWelcome();
 
         Scanner s = new Scanner(System.in);
 
@@ -30,9 +19,7 @@ public class Della {
             try {
                 tasks = Storage.loadTasks();
             } catch (FileNotFoundException e) {
-                System.out.println("    ----------------------------------------");
-                System.out.println("    Error loading tasks");
-                System.out.println("    ----------------------------------------");
+                UI.showError("Unable to load tasks from storage");
                 tasks = new ArrayList<>();
             }
         } else {
@@ -61,13 +48,10 @@ public class Della {
 
             // exit when bye command given
             if (command == Command.BYE) {
+                UI.showFarewell();
                 break;
             } else if (command == Command.LIST) {
-                System.out.println("    ----------------------------------------");
-                for (int i = 0; i < tasks.size(); i++) {
-                    System.out.printf("    %d. %s\n", i + 1, tasks.get(i));
-                }
-                System.out.println("    ----------------------------------------");
+                UI.showTasks(tasks);
             } else if (command == Command.MARK) {
                 // mark task
                 try {
@@ -76,29 +60,18 @@ public class Della {
                     Task task = tasks.get(taskNum - 1);
                     task.mark();
                     Storage.updateTaskStatus(taskNum, task);
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Nice! I have marked this task as done:");
-                    System.out.println("      marked: " + task);
-                    System.out.println("    ----------------------------------------");
+                    UI.showMarkedTask(task);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // checks if a task number is provided
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Cannot mark empty task");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Cannot mark empty task");
                 } catch (NumberFormatException e) {
                     // checks if mark command is followed by valid int i.e. 1 and not one
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Enter a valid task number. eg mark 1");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Enter a valid task number. eg mark 1");
                 } catch (IndexOutOfBoundsException e) {
                     // checks if task number provided is within the number of tasks user actually has
-                    System.out.println("    ----------------------------------------");
-                    System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
-                    System.out.println("    ----------------------------------------");
+                    UI.showError(String.format("You only have %d task(s). Try again", tasks.size()));
                 } catch (IOException e) {
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Error in updating task in storage");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Unable to update task in storage");
                 }
             } else if (command == Command.UNMARK) {
                 // unmark task
@@ -328,7 +301,5 @@ public class Della {
             }
         }
         s.close();
-        System.out.println("========================================");
-        System.out.println(farewell);
     }
 }
