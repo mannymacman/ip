@@ -1,3 +1,11 @@
+package della;
+
+import della.command.Command;
+import della.parser.Parser;
+import della.storage.Storage;
+import della.task.Task;
+import della.task.TaskList;
+import della.ui.UI;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
@@ -27,7 +35,7 @@ public class Della {
 
         Scanner s = new Scanner(System.in);
 
-        String input = ""; // stores user input from scanner
+        String input; // stores user input from scanner
 
         while (true) {
             input = s.nextLine();
@@ -106,7 +114,7 @@ public class Della {
                     UI.showAddedTask(newTask, taskList.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // catches if content is empty
-                    // eg. user enters "deadline" with no blank spaces
+                    // e.g. user enters "deadline" with no blank spaces
                     UI.showError("Bro, cannot add empty deadline");
                 } catch (DateTimeParseException e) {
                     UI.showError("Enter date in dd/MM/yyyy HHmm format");
@@ -124,7 +132,7 @@ public class Della {
                     UI.showAddedTask(newTask, taskList.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // catches if content is empty
-                    // eg. user enters "event" with no blank spaces
+                    // e.g. user enters "event" with no blank spaces
                     UI.showError("Bro, cannot add empty event");
                 } catch (DateTimeParseException e) {
                     UI.showError("Enter date in dd/MM/yyyy HHmm format");

@@ -1,3 +1,6 @@
+package della.ui;
+
+import della.task.Task;
 import java.util.ArrayList;
 
 public class UI {
