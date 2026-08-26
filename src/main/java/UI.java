@@ -57,4 +57,12 @@ public class UI {
         System.out.printf("     Now you have %d tasks in the list.\n", numTasks);
         System.out.println("    ----------------------------------------");
     }
+
+    public static void showDeletedTask(Task task, int numTasks) {
+        System.out.println("    ----------------------------------------");
+        System.out.println("    Noted. I've removed this task:");
+        System.out.println("      " + task);
+        System.out.printf("    Now you have %d tasks in the list.\n", numTasks);
+        System.out.println("    ----------------------------------------");
+    }
 }

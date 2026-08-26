@@ -211,36 +211,22 @@ public class Della {
                     Task task = tasks.get(taskNum - 1);
                     tasks.remove(taskNum - 1);
                     Storage.deleteTask(taskNum);
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Noted. I've removed this task:");
-                    System.out.println("      " + task);
-                    System.out.printf("    Now you have %d tasks in the list.\n", tasks.size());
-                    System.out.println("    ----------------------------------------");
+                    UI.showDeletedTask(task, tasks.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // checks if a task number is provided
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Cannot delete empty task");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Cannot delete empty task");
                 } catch (NumberFormatException e) {
                     // checks if delete command is followed by valid int i.e. 1 and not one
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Enter a valid task number. eg delete 1");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Enter a valid task number. eg delete 1");
                 } catch (IndexOutOfBoundsException e) {
                     // checks if task number provided is within the number of tasks user actually has
-                    System.out.println("    ----------------------------------------");
-                    System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
-                    System.out.println("    ----------------------------------------");
+                    UI.showError(String.format("You only have %d task(s). Try again", tasks.size()));
                 } catch (IOException e) {
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Error in deleting task in storage");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Error in deleting task in storage");
                 }
             } else {
                 // handles invalid and empty commands
-                System.out.println("    ----------------------------------------");
-                System.out.println("    I don't recognise this command :( Try again pls tyvm");
-                System.out.println("    ----------------------------------------");
+                UI.showError("I don't recognise this command :( Try again pls tyvm");
             }
         }
         s.close();
