@@ -81,29 +81,18 @@ public class Della {
                     Task task = tasks.get(taskNum - 1);
                     task.unmark();
                     Storage.updateTaskStatus(taskNum, task);
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    OK, I've marked this task as not done yet:");
-                    System.out.println("      unmarked: " + task);
-                    System.out.println("    ----------------------------------------");
+                    UI.showUnmarkedTask(task);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // checks if a task number is provided
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Cannot mark empty task");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Cannot unmark empty task");
                 } catch (NumberFormatException e) {
                     // checks if unmark command is followed by valid int i.e. 1 and not one
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Enter a valid task number. eg unmark 1");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Enter a valid task number. eg unmark 1");
                 } catch (IndexOutOfBoundsException e) {
                     // checks if task number provided is within the number of tasks user actually has
-                    System.out.println("    ----------------------------------------");
-                    System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
-                    System.out.println("    ----------------------------------------");
+                    UI.showError(String.format("You only have %d task(s). Try again", tasks.size()));
                 } catch (IOException e) {
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Error in updating task in storage");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Error in updating task in storage");
                 }
             } else if (command == Command.TODO) {
                 try {

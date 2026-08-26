@@ -42,4 +42,11 @@ public class UI {
         System.out.println("      marked: " + task);
         System.out.println("    ----------------------------------------");
     }
+
+    public static void showUnmarkedTask(Task task) {
+        System.out.println("    ----------------------------------------");
+        System.out.println("    OK, I've marked this task as not done yet:");
+        System.out.println("      unmarked: " + task);
+        System.out.println("    ----------------------------------------");
+    }
 }
