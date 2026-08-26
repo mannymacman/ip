@@ -1,334 +1,157 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class Della {
     public static void main(String[] args) {
-        String banner =
-                "   DDDD   eeee  l      l       aaaa\n" +
-                "   D   D  e     l      l      a    a\n" +
-                "   D   D  eee   l      l      aaaaaa\n" +
-                "   D   D  e     l      l      a    a\n" +
-                "   DDDD   eeee  llll   llll   a    a";
-        String greeting = "Hi! I'm Della :))\nHow can I help you?";
-        String farewell = "Byee! Rest well!";
 
-        System.out.println(banner);
-        System.out.println("========================================");
-        System.out.println(greeting);
-        System.out.println("========================================");
+        UI.showWelcome();
 
         Scanner s = new Scanner(System.in);
 
         String input = ""; // stores user input from scanner
-        ArrayList<Task> tasks; // stores created tasks
+        TaskList taskList; // manage tasklist
 
         if (Storage.hasData()) {
             try {
-                tasks = Storage.loadTasks();
+                taskList = new TaskList(Storage.loadTasks());
             } catch (FileNotFoundException e) {
-                System.out.println("    ----------------------------------------");
-                System.out.println("    Error loading tasks");
-                System.out.println("    ----------------------------------------");
-                tasks = new ArrayList<>();
+                UI.showError("Unable to load tasks from storage");
+                taskList = new TaskList();
             }
         } else {
-            tasks = new ArrayList<>();
+            taskList = new TaskList();
         }
 
         while (true) {
             input = s.nextLine();
 
-
-            String[] inputParts = input.split("\\s+", 2);
-
-            Command command;
-
-            switch (inputParts[0]) {
-                case "bye" -> command = Command.BYE;
-                case "list" -> command = Command.LIST;
-                case "mark" -> command = Command.MARK;
-                case "unmark" -> command = Command.UNMARK;
-                case "todo" -> command = Command.TODO;
-                case "deadline" -> command = Command.DEADLINE;
-                case "event" -> command = Command.EVENT;
-                case "delete" -> command = Command.DELETE;
-                default -> command = Command.UNKNOWN;
-            }
+            Command command = Parser.parseCommand(input);
+            String argument;
 
             // exit when bye command given
             if (command == Command.BYE) {
+                UI.showFarewell();
                 break;
             } else if (command == Command.LIST) {
-                System.out.println("    ----------------------------------------");
-                for (int i = 0; i < tasks.size(); i++) {
-                    System.out.printf("    %d. %s\n", i + 1, tasks.get(i));
-                }
-                System.out.println("    ----------------------------------------");
+                UI.showTasks(taskList.getTasks());
             } else if (command == Command.MARK) {
                 // mark task
                 try {
-                    String content = inputParts[1];
-                    int taskNum = Integer.parseInt(content);
-                    Task task = tasks.get(taskNum - 1);
-                    task.mark();
+                    argument = Parser.parseArguments(input);
+                    int taskNum = Parser.parseTaskNumber(argument);
+                    Task task = taskList.mark(taskNum - 1);
                     Storage.updateTaskStatus(taskNum, task);
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Nice! I have marked this task as done:");
-                    System.out.println("      marked: " + task);
-                    System.out.println("    ----------------------------------------");
+                    UI.showMarkedTask(task);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // checks if a task number is provided
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Cannot mark empty task");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Cannot mark empty task");
                 } catch (NumberFormatException e) {
                     // checks if mark command is followed by valid int i.e. 1 and not one
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Enter a valid task number. eg mark 1");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Enter a valid task number. eg mark 1");
                 } catch (IndexOutOfBoundsException e) {
                     // checks if task number provided is within the number of tasks user actually has
-                    System.out.println("    ----------------------------------------");
-                    System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
-                    System.out.println("    ----------------------------------------");
+                    UI.showError(String.format("You only have %d task(s). Try again", taskList.size()));
                 } catch (IOException e) {
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Error in updating task in storage");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Unable to update task in storage");
                 }
             } else if (command == Command.UNMARK) {
                 // unmark task
                 try {
-                    String content = inputParts[1];
-                    int taskNum = Integer.parseInt(content);
-                    Task task = tasks.get(taskNum - 1);
-                    task.unmark();
+                    argument = Parser.parseArguments(input);
+                    int taskNum = Parser.parseTaskNumber(argument);
+                    Task task = taskList.unmark(taskNum - 1);
                     Storage.updateTaskStatus(taskNum, task);
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    OK, I've marked this task as not done yet:");
-                    System.out.println("      unmarked: " + task);
-                    System.out.println("    ----------------------------------------");
+                    UI.showUnmarkedTask(task);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // checks if a task number is provided
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Cannot mark empty task");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Cannot unmark empty task");
                 } catch (NumberFormatException e) {
                     // checks if unmark command is followed by valid int i.e. 1 and not one
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Enter a valid task number. eg unmark 1");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Enter a valid task number. eg unmark 1");
                 } catch (IndexOutOfBoundsException e) {
                     // checks if task number provided is within the number of tasks user actually has
-                    System.out.println("    ----------------------------------------");
-                    System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
-                    System.out.println("    ----------------------------------------");
+                    UI.showError(String.format("You only have %d task(s). Try again", taskList.size()));
                 } catch (IOException e) {
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Error in updating task in storage");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Error in updating task in storage");
                 }
             } else if (command == Command.TODO) {
                 try {
-                    String content = inputParts[1];
-                    if (content.isEmpty()) {
-                        // catches if content is empty
-                        // eg. user enters "todo  " with trailing blank spaces
-                        System.out.println("    ----------------------------------------");
-                        System.out.println("    Bro, cannot add empty todo");
-                        System.out.println("    ----------------------------------------");
-                    } else {
-                        Task newTask = new Todo(content);
-                        try {
-                            Storage.storeTask(newTask);
-                            tasks.add(newTask);
-                            System.out.println("    ----------------------------------------");
-                            System.out.println("     Got it. I've added this task:");
-                            System.out.printf("       %s\n", newTask);
-                            System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                            System.out.println("    ----------------------------------------");
-                        } catch (IOException e) {
-                            System.out.println("    ----------------------------------------");
-                            System.out.println("    Error when storing task");
-                            System.out.println("    ----------------------------------------");
-                        }
-                    }
+                    argument = Parser.parseArguments(input);
+                    Task newTask = Parser.parseTodo(argument);
+                    Storage.storeTask(newTask);
+                    taskList.add(newTask);
+                    UI.showAddedTask(newTask, taskList.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // catches if content is empty
                     // eg. user enters "todo" with no blank spaces
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Bro, cannot add empty todo");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Bro, cannot add empty todo task");
+                } catch (IllegalArgumentException e) {
+                    UI.showError(e.getMessage());
+                } catch (IOException e) {
+                    UI.showError("Error when storing task");
                 }
             } else if (command == Command.DEADLINE) {
                 try {
-                    String content = inputParts[1];
-                    if (content.isEmpty()) {
-                        // catches if content is empty
-                        // eg. user enters "deadline  " with trailing blank spaces
-                        System.out.println("    ----------------------------------------");
-                        System.out.println("    Bro, cannot add empty deadline");
-                        System.out.println("    ----------------------------------------");
-                    } else {
-                        String[] contentParts = content.split("\\s+/by\\s+");
-                        // checks if user has entered valid /by command i.e. /by sunday
-                        if (contentParts.length == 1) {
-                            System.out.println("    ----------------------------------------");
-                            System.out.println("    Missing or invalid /by command. Pls try again");
-                            System.out.println("    ----------------------------------------");
-                        } else {
-                            try {
-                                String taskName = contentParts[0];
-                                String dateString = contentParts[1];
-                                LocalDateTime dateTime = DateParser.parseDateTime(dateString, "dd/MM/yyyy HHmm");
-                                if (dateTime.isBefore(LocalDateTime.now())) {
-                                    throw new IllegalArgumentException("DateTime cannot be before today");
-                                }
-                                Task newTask = new Deadline(taskName, dateTime);
-                                Storage.storeTask(newTask);
-                                tasks.add(newTask);
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("     Got it. I've added this task:");
-                                System.out.printf("       %s\n", newTask);
-                                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                                System.out.println("    ----------------------------------------");
-                            } catch (DateTimeParseException e) {
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("    Enter date in dd/MM/yyyy HHmm format");
-                                System.out.println("    ----------------------------------------");
-                            } catch (IllegalArgumentException e) {
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("    DateTime entered cannot be before today");
-                                System.out.println("    ----------------------------------------");
-                            } catch (IOException e) {
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("    Error when storing task");
-                                System.out.println("    ----------------------------------------");
-                            }
-                        }
-                    }
+                    argument = Parser.parseArguments(input);
+                    Task newTask = Parser.parseDeadline(argument);
+                    Storage.storeTask(newTask);
+                    taskList.add(newTask);
+                    UI.showAddedTask(newTask, taskList.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // catches if content is empty
                     // eg. user enters "deadline" with no blank spaces
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Bro, cannot add empty deadline");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Bro, cannot add empty deadline");
+                } catch (DateTimeParseException e) {
+                    UI.showError("Enter date in dd/MM/yyyy HHmm format");
+                } catch (IllegalArgumentException e) {
+                    UI.showError(e.getMessage());
+                } catch (IOException e) {
+                    UI.showError("Error when storing task");
                 }
             } else if (command == Command.EVENT) {
                 try {
-                    String content = inputParts[1];
-                    if (content.isEmpty()) {
-                        // catches if content is empty
-                        // eg. user enters "event  " with trailing blank spaces
-                        System.out.println("    ----------------------------------------");
-                        System.out.println("    Bro, cannot add empty event");
-                        System.out.println("    ----------------------------------------");
-                    } else {
-                        String[] contentParts = content.split("\\s+/from\\s+");
-                        if (contentParts.length == 1) {
-                            System.out.println("    ----------------------------------------");
-                            System.out.println("    Missing or invalid /from command. Pls try again");
-                            System.out.println("    ----------------------------------------");
-                        } else {
-                            String taskName = contentParts[0];
-                            String[] timeParts = contentParts[1].split("\\s+/to\\s+");
-                            if (timeParts.length == 1) {
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("    Missing or invalid /to command. Pls try again");
-                                System.out.println("    ----------------------------------------");
-                            } else {
-                                try {
-                                    String fromDateString = timeParts[0];
-                                    String toDateString = timeParts[1];
-                                    LocalDateTime fromDateTime = DateParser.parseDateTime(fromDateString, "dd/MM/yyyy HHmm");
-                                    LocalDateTime toDateTime = DateParser.parseDateTime(toDateString, "dd/MM/yyyy HHmm");
-                                    if (fromDateTime.isBefore(LocalDateTime.now()) || fromDateTime.isBefore(LocalDateTime.now())) {
-                                        throw new IllegalArgumentException("DateTime cannot be before today");
-                                    }
-                                    if (toDateTime.isBefore(fromDateTime)) {
-                                        throw new InvalidEventDateException();
-                                    }
-                                    Task newTask = new Event(taskName, fromDateTime, toDateTime);
-                                    Storage.storeTask(newTask);
-                                    tasks.add(newTask);
-                                    System.out.println("    ----------------------------------------");
-                                    System.out.println("     Got it. I've added this task:");
-                                    System.out.printf("       %s\n", newTask);
-                                    System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                                    System.out.println("    ----------------------------------------");
-                                } catch (DateTimeParseException e) {
-                                    System.out.println("    ----------------------------------------");
-                                    System.out.println("    Enter date in dd/MM/yyyy HHmm format");
-                                    System.out.println("    ----------------------------------------");
-                                } catch (IllegalArgumentException e) {
-                                    System.out.println("    ----------------------------------------");
-                                    System.out.println("    DateTime entered cannot be before today");
-                                    System.out.println("    ----------------------------------------");
-                                } catch (InvalidEventDateException e) {
-                                    System.out.println("    ----------------------------------------");
-                                    System.out.println("    /to DateTime must be before /by DateTime");
-                                    System.out.println("    ----------------------------------------");
-                                } catch (IOException e) {
-                                    System.out.println("    ----------------------------------------");
-                                    System.out.println("    Error when storing task");
-                                    System.out.println("    ----------------------------------------");
-                                }
-                            }
-                        }
-                    }
+                    argument = Parser.parseArguments(input);
+                    Task newTask = Parser.parseEvent(argument);
+                    Storage.storeTask(newTask);
+                    taskList.add(newTask);
+                    UI.showAddedTask(newTask, taskList.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // catches if content is empty
                     // eg. user enters "event" with no blank spaces
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Bro, cannot add empty event");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Bro, cannot add empty event");
+                } catch (DateTimeParseException e) {
+                    UI.showError("Enter date in dd/MM/yyyy HHmm format");
+                } catch (IllegalArgumentException e) {
+                    UI.showError(e.getMessage());
+                } catch (IOException e) {
+                    UI.showError("Error when storing task");
                 }
             } else if (command == Command.DELETE) {
-                // unmark task
                 try {
-                    String content = inputParts[1];
-                    int taskNum = Integer.parseInt(content);
-                    Task task = tasks.get(taskNum - 1);
-                    tasks.remove(taskNum - 1);
+                    argument = Parser.parseArguments(input);
+                    int taskNum = Parser.parseTaskNumber(argument);
+                    Task task = taskList.delete(taskNum - 1);
                     Storage.deleteTask(taskNum);
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Noted. I've removed this task:");
-                    System.out.println("      " + task);
-                    System.out.printf("    Now you have %d tasks in the list.\n", tasks.size());
-                    System.out.println("    ----------------------------------------");
+                    UI.showDeletedTask(task, taskList.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // checks if a task number is provided
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Cannot delete empty task");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Cannot delete empty task");
                 } catch (NumberFormatException e) {
                     // checks if delete command is followed by valid int i.e. 1 and not one
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Enter a valid task number. eg delete 1");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Enter a valid task number. eg delete 1");
                 } catch (IndexOutOfBoundsException e) {
                     // checks if task number provided is within the number of tasks user actually has
-                    System.out.println("    ----------------------------------------");
-                    System.out.printf("     You only have %d task(s). Try again\n", tasks.size());
-                    System.out.println("    ----------------------------------------");
+                    UI.showError(String.format("You only have %d task(s). Try again", taskList.size()));
                 } catch (IOException e) {
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Error in deleting task in storage");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Error in deleting task in storage");
                 }
             } else {
                 // handles invalid and empty commands
-                System.out.println("    ----------------------------------------");
-                System.out.println("    I don't recognise this command :( Try again pls tyvm");
-                System.out.println("    ----------------------------------------");
+                UI.showError("I don't recognise this command :( Try again pls tyvm");
             }
         }
         s.close();
-        System.out.println("========================================");
-        System.out.println(farewell);
     }
 }
