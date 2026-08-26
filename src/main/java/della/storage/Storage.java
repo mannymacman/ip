@@ -36,8 +36,8 @@ public class Storage {
 
     public ArrayList<Task> loadTasks() throws FileNotFoundException {
         File f = new File(this.filePath);
-        Scanner s = new Scanner(f);
         ArrayList<Task> tasks = new ArrayList<>();
+        Scanner s = new Scanner(f);
 
         while (s.hasNext()) {
             String taskLine = s.nextLine();
@@ -59,7 +59,7 @@ public class Storage {
                                 DateParser.parseDateTime(taskParts[4], "MMM dd yyyy h:mma")));
             }
         }
-
+        s.close();
         return tasks;
     }
 
