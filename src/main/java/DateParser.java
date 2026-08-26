@@ -1,11 +1,10 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 public class DateParser {
-    public static LocalDateTime parseDateTime(String dateString) throws DateTimeParseException {
-        DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+    public static LocalDateTime parseDateTime(String dateString, String datePattern) throws DateTimeParseException {
+        DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern(datePattern);
         LocalDateTime dateTime = LocalDateTime.parse(dateString, inputFormat);
         if (dateTime.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("DateTime cannot be before today");
