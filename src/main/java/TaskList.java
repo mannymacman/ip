@@ -70,7 +70,7 @@ public class TaskList {
     /**
      * Returns a copy of the tasks for displaying or saving.
      */
-    public List<Task> getTasks() {
-        return List.copyOf(tasks);
+    public ArrayList<Task> getTasks() {
+        return new ArrayList<>(List.copyOf(tasks));
     }
 }

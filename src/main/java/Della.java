@@ -13,17 +13,17 @@ public class Della {
         Scanner s = new Scanner(System.in);
 
         String input = ""; // stores user input from scanner
-        ArrayList<Task> tasks; // stores created tasks
+        TaskList taskList; // manage tasklist
 
         if (Storage.hasData()) {
             try {
-                tasks = Storage.loadTasks();
+                taskList = new TaskList(Storage.loadTasks());
             } catch (FileNotFoundException e) {
                 UI.showError("Unable to load tasks from storage");
-                tasks = new ArrayList<>();
+                taskList = new TaskList();
             }
         } else {
-            tasks = new ArrayList<>();
+            taskList = new TaskList();
         }
 
         while (true) {
@@ -51,14 +51,13 @@ public class Della {
                 UI.showFarewell();
                 break;
             } else if (command == Command.LIST) {
-                UI.showTasks(tasks);
+                UI.showTasks(taskList.getTasks());
             } else if (command == Command.MARK) {
                 // mark task
                 try {
                     String content = inputParts[1];
                     int taskNum = Integer.parseInt(content);
-                    Task task = tasks.get(taskNum - 1);
-                    task.mark();
+                    Task task = taskList.mark(taskNum - 1);
                     Storage.updateTaskStatus(taskNum, task);
                     UI.showMarkedTask(task);
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -69,7 +68,7 @@ public class Della {
                     UI.showError("Enter a valid task number. eg mark 1");
                 } catch (IndexOutOfBoundsException e) {
                     // checks if task number provided is within the number of tasks user actually has
-                    UI.showError(String.format("You only have %d task(s). Try again", tasks.size()));
+                    UI.showError(String.format("You only have %d task(s). Try again", taskList.size()));
                 } catch (IOException e) {
                     UI.showError("Unable to update task in storage");
                 }
@@ -78,8 +77,7 @@ public class Della {
                 try {
                     String content = inputParts[1];
                     int taskNum = Integer.parseInt(content);
-                    Task task = tasks.get(taskNum - 1);
-                    task.unmark();
+                    Task task = taskList.unmark(taskNum - 1);
                     Storage.updateTaskStatus(taskNum, task);
                     UI.showUnmarkedTask(task);
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -90,7 +88,7 @@ public class Della {
                     UI.showError("Enter a valid task number. eg unmark 1");
                 } catch (IndexOutOfBoundsException e) {
                     // checks if task number provided is within the number of tasks user actually has
-                    UI.showError(String.format("You only have %d task(s). Try again", tasks.size()));
+                    UI.showError(String.format("You only have %d task(s). Try again", taskList.size()));
                 } catch (IOException e) {
                     UI.showError("Error in updating task in storage");
                 }
@@ -105,8 +103,8 @@ public class Della {
                         Task newTask = new Todo(content);
                         try {
                             Storage.storeTask(newTask);
-                            tasks.add(newTask);
-                            UI.showAddedTask(newTask, tasks.size());
+                            taskList.add(newTask);
+                            UI.showAddedTask(newTask, taskList.size());
                         } catch (IOException e) {
                             UI.showError("Error when storing task");
                         }
@@ -138,8 +136,8 @@ public class Della {
                                 }
                                 Task newTask = new Deadline(taskName, dateTime);
                                 Storage.storeTask(newTask);
-                                tasks.add(newTask);
-                                UI.showAddedTask(newTask, tasks.size());
+                                taskList.add(newTask);
+                                UI.showAddedTask(newTask, taskList.size());
                             } catch (DateTimeParseException e) {
                                 UI.showError("Enter date in dd/MM/yyyy HHmm format");
                             } catch (IllegalArgumentException e) {
@@ -184,8 +182,8 @@ public class Della {
                                     }
                                     Task newTask = new Event(taskName, fromDateTime, toDateTime);
                                     Storage.storeTask(newTask);
-                                    tasks.add(newTask);
-                                    UI.showAddedTask(newTask, tasks.size());
+                                    taskList.add(newTask);
+                                    UI.showAddedTask(newTask, taskList.size());
                                 } catch (DateTimeParseException e) {
                                     UI.showError("Enter date in dd/MM/yyyy HHmm format");
                                 } catch (IllegalArgumentException e) {
@@ -208,10 +206,9 @@ public class Della {
                 try {
                     String content = inputParts[1];
                     int taskNum = Integer.parseInt(content);
-                    Task task = tasks.get(taskNum - 1);
-                    tasks.remove(taskNum - 1);
+                    Task task = taskList.delete(taskNum - 1);
                     Storage.deleteTask(taskNum);
-                    UI.showDeletedTask(task, tasks.size());
+                    UI.showDeletedTask(task, taskList.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // checks if a task number is provided
                     UI.showError("Cannot delete empty task");
@@ -220,7 +217,7 @@ public class Della {
                     UI.showError("Enter a valid task number. eg delete 1");
                 } catch (IndexOutOfBoundsException e) {
                     // checks if task number provided is within the number of tasks user actually has
-                    UI.showError(String.format("You only have %d task(s). Try again", tasks.size()));
+                    UI.showError(String.format("You only have %d task(s). Try again", taskList.size()));
                 } catch (IOException e) {
                     UI.showError("Error in deleting task in storage");
                 }
