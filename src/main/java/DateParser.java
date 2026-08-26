@@ -5,11 +5,7 @@ import java.time.format.DateTimeParseException;
 public class DateParser {
     public static LocalDateTime parseDateTime(String dateString, String datePattern) throws DateTimeParseException {
         DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern(datePattern);
-        LocalDateTime dateTime = LocalDateTime.parse(dateString, inputFormat);
-        if (dateTime.isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("DateTime cannot be before today");
-        }
-        return dateTime;
+        return LocalDateTime.parse(dateString, inputFormat);
     }
 
     public static String printDateTime(LocalDateTime dateTime) {

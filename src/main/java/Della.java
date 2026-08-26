@@ -29,7 +29,7 @@ public class Della {
         if (Storage.hasData()) {
             try {
                 tasks = Storage.loadTasks();
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
                 System.out.println("    ----------------------------------------");
                 System.out.println("    Error loading tasks");
                 System.out.println("    ----------------------------------------");
@@ -185,6 +185,9 @@ public class Della {
                                 String taskName = contentParts[0];
                                 String dateString = contentParts[1];
                                 LocalDateTime dateTime = DateParser.parseDateTime(dateString, "dd/MM/yyyy HHmm");
+                                if (dateTime.isBefore(LocalDateTime.now())) {
+                                    throw new IllegalArgumentException("DateTime cannot be before today");
+                                }
                                 Task newTask = new Deadline(taskName, dateTime);
                                 Storage.storeTask(newTask);
                                 tasks.add(newTask);
@@ -243,6 +246,12 @@ public class Della {
                                     String toDateString = timeParts[1];
                                     LocalDateTime fromDateTime = DateParser.parseDateTime(fromDateString, "dd/MM/yyyy HHmm");
                                     LocalDateTime toDateTime = DateParser.parseDateTime(toDateString, "dd/MM/yyyy HHmm");
+                                    if (fromDateTime.isBefore(LocalDateTime.now()) || fromDateTime.isBefore(LocalDateTime.now())) {
+                                        throw new IllegalArgumentException("DateTime cannot be before today");
+                                    }
+                                    if (toDateTime.isBefore(fromDateTime)) {
+                                        throw new InvalidEventDateException();
+                                    }
                                     Task newTask = new Event(taskName, fromDateTime, toDateTime);
                                     Storage.storeTask(newTask);
                                     tasks.add(newTask);

@@ -4,20 +4,14 @@ public class Event extends Task {
     private LocalDateTime from;
     private LocalDateTime to;
 
-    public Event(String name, LocalDateTime from, LocalDateTime to) throws InvalidEventDateException {
+    public Event(String name, LocalDateTime from, LocalDateTime to) {
         super(name);
-        if (to.isBefore(from)) {
-            throw new InvalidEventDateException();
-        }
         this.from = from;
         this.to = to;
     }
 
-    public Event(String name, boolean isDone, LocalDateTime from, LocalDateTime to) throws InvalidEventDateException {
+    public Event(String name, boolean isDone, LocalDateTime from, LocalDateTime to) {
         super(name);
-        if (to.isBefore(from)) {
-            throw new InvalidEventDateException();
-        }
         this.isDone = isDone;
         this.from = from;
         this.to = to;

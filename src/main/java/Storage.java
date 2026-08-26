@@ -21,7 +21,7 @@ public class Storage {
         return file.exists() && file.length() > 0;
     }
 
-    public static ArrayList<Task> loadTasks() throws FileNotFoundException, InvalidEventDateException {
+    public static ArrayList<Task> loadTasks() throws FileNotFoundException {
         File f = new File("./data/della.txt");
         Scanner s = new Scanner(f);
         ArrayList<Task> tasks = new ArrayList<>();
