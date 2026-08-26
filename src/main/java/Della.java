@@ -100,31 +100,21 @@ public class Della {
                     if (content.isEmpty()) {
                         // catches if content is empty
                         // eg. user enters "todo  " with trailing blank spaces
-                        System.out.println("    ----------------------------------------");
-                        System.out.println("    Bro, cannot add empty todo");
-                        System.out.println("    ----------------------------------------");
+                        UI.showError("Bro, cannot add empty todo task");
                     } else {
                         Task newTask = new Todo(content);
                         try {
                             Storage.storeTask(newTask);
                             tasks.add(newTask);
-                            System.out.println("    ----------------------------------------");
-                            System.out.println("     Got it. I've added this task:");
-                            System.out.printf("       %s\n", newTask);
-                            System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                            System.out.println("    ----------------------------------------");
+                            UI.showAddedTask(newTask, tasks.size());
                         } catch (IOException e) {
-                            System.out.println("    ----------------------------------------");
-                            System.out.println("    Error when storing task");
-                            System.out.println("    ----------------------------------------");
+                            UI.showError("Error when storing task");
                         }
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // catches if content is empty
                     // eg. user enters "todo" with no blank spaces
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Bro, cannot add empty todo");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Bro, cannot add empty todo task");
                 }
             } else if (command == Command.DEADLINE) {
                 try {
