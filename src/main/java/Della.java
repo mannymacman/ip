@@ -4,25 +4,30 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Della {
-    public static void main(String[] args) {
+    private final Storage storage;
+    private TaskList taskList;
 
+    public Della(String filePath) {
+        this.storage = new Storage(filePath);
+
+        if (this.storage.hasData()) {
+            try {
+                this.taskList = new TaskList(storage.loadTasks());
+            } catch (FileNotFoundException e) {
+                UI.showError("Unable to load tasks from storage");
+                this.taskList = new TaskList();
+            }
+        } else {
+            this.taskList = new TaskList();
+        }
+    }
+
+    public void run() {
         UI.showWelcome();
 
         Scanner s = new Scanner(System.in);
 
         String input = ""; // stores user input from scanner
-        TaskList taskList; // manage tasklist
-
-        if (Storage.hasData()) {
-            try {
-                taskList = new TaskList(Storage.loadTasks());
-            } catch (FileNotFoundException e) {
-                UI.showError("Unable to load tasks from storage");
-                taskList = new TaskList();
-            }
-        } else {
-            taskList = new TaskList();
-        }
 
         while (true) {
             input = s.nextLine();
@@ -42,7 +47,7 @@ public class Della {
                     argument = Parser.parseArguments(input);
                     int taskNum = Parser.parseTaskNumber(argument);
                     Task task = taskList.mark(taskNum - 1);
-                    Storage.updateTaskStatus(taskNum, task);
+                    storage.updateTaskStatus(taskNum, task);
                     UI.showMarkedTask(task);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // checks if a task number is provided
@@ -62,7 +67,7 @@ public class Della {
                     argument = Parser.parseArguments(input);
                     int taskNum = Parser.parseTaskNumber(argument);
                     Task task = taskList.unmark(taskNum - 1);
-                    Storage.updateTaskStatus(taskNum, task);
+                    storage.updateTaskStatus(taskNum, task);
                     UI.showUnmarkedTask(task);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // checks if a task number is provided
@@ -80,7 +85,7 @@ public class Della {
                 try {
                     argument = Parser.parseArguments(input);
                     Task newTask = Parser.parseTodo(argument);
-                    Storage.storeTask(newTask);
+                    storage.storeTask(newTask);
                     taskList.add(newTask);
                     UI.showAddedTask(newTask, taskList.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -96,7 +101,7 @@ public class Della {
                 try {
                     argument = Parser.parseArguments(input);
                     Task newTask = Parser.parseDeadline(argument);
-                    Storage.storeTask(newTask);
+                    storage.storeTask(newTask);
                     taskList.add(newTask);
                     UI.showAddedTask(newTask, taskList.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -114,7 +119,7 @@ public class Della {
                 try {
                     argument = Parser.parseArguments(input);
                     Task newTask = Parser.parseEvent(argument);
-                    Storage.storeTask(newTask);
+                    storage.storeTask(newTask);
                     taskList.add(newTask);
                     UI.showAddedTask(newTask, taskList.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -133,7 +138,7 @@ public class Della {
                     argument = Parser.parseArguments(input);
                     int taskNum = Parser.parseTaskNumber(argument);
                     Task task = taskList.delete(taskNum - 1);
-                    Storage.deleteTask(taskNum);
+                    storage.deleteTask(taskNum);
                     UI.showDeletedTask(task, taskList.size());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // checks if a task number is provided
@@ -153,5 +158,9 @@ public class Della {
             }
         }
         s.close();
+    }
+
+    public static void main(String[] args) {
+        new Della("./data/della.txt").run();
     }
 }

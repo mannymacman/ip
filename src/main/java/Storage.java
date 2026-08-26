@@ -9,20 +9,26 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class Storage {
-    public static void storeTask(Task task) throws IOException {
-        FileWriter fw = new FileWriter("./data/della.txt", true);
+    private final String filePath;
+
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public void storeTask(Task task) throws IOException {
+        FileWriter fw = new FileWriter(this.filePath, true);
         fw.write(task.formatForStorage());
         fw.write("\n");
         fw.close();
     }
 
-    public static boolean hasData() {
-        File file = new File("./data/della.txt");
+    public boolean hasData() {
+        File file = new File(this.filePath);
         return file.exists() && file.length() > 0;
     }
 
-    public static ArrayList<Task> loadTasks() throws FileNotFoundException {
-        File f = new File("./data/della.txt");
+    public ArrayList<Task> loadTasks() throws FileNotFoundException {
+        File f = new File(this.filePath);
         Scanner s = new Scanner(f);
         ArrayList<Task> tasks = new ArrayList<>();
 
@@ -50,16 +56,16 @@ public class Storage {
         return tasks;
     }
 
-    public static void updateTaskStatus(int taskNum, Task task) throws IOException {
-        Path filePath = Path.of("./data/della.txt");
+    public void updateTaskStatus(int taskNum, Task task) throws IOException {
+        Path filePath = Path.of(this.filePath);
         List<String> taskLines = Files.readAllLines(filePath);
         int lineIndex = taskNum - 1;
         taskLines.set(lineIndex, task.formatForStorage());
         Files.write(filePath, taskLines);
     }
 
-    public static void deleteTask(int taskNum) throws IOException {
-        Path filePath = Path.of("./data/della.txt");
+    public void deleteTask(int taskNum) throws IOException {
+        Path filePath = Path.of(this.filePath);
         List<String> taskLines = Files.readAllLines(filePath);
         int lineIndex = taskNum - 1;
         taskLines.remove(lineIndex);
