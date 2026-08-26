@@ -1,12 +1,14 @@
-public class Deadline extends Task {
-    private String by;
+import java.time.LocalDateTime;
 
-    public Deadline(String name, String by) {
+public class Deadline extends Task {
+    private LocalDateTime by;
+
+    public Deadline(String name, LocalDateTime by) {
         super(name);
         this.by = by;
     }
 
-    public Deadline(String name, boolean isDone, String by) {
+    public Deadline(String name, boolean isDone, LocalDateTime by) {
         super(name);
         this.isDone = isDone;
         this.by = by;
@@ -14,11 +16,11 @@ public class Deadline extends Task {
 
     @Override
     public String formatForStorage() {
-        return String.format("%s|%s|%s|%s", "D", super.isDone ? "1" : "0", this.name, this.by);
+        return String.format("%s|%s|%s|%s", "D", super.isDone ? "1" : "0", this.name, DateParser.printDateTime(this.by));
     }
 
     @Override
     public String toString() {
-        return String.format("[D]%s (by %s)", super.toString(), this.by);
+        return String.format("[D]%s (by %s)", super.toString(), DateParser.printDateTime(this.by));
     }
 }

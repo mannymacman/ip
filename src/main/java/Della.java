@@ -1,5 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -179,14 +181,25 @@ public class Della {
                             System.out.println("    Missing or invalid /by command. Pls try again");
                             System.out.println("    ----------------------------------------");
                         } else {
-                            Task newTask = new Deadline(contentParts[0], contentParts[1]);
                             try {
+                                String taskName = contentParts[0];
+                                String dateString = contentParts[1];
+                                LocalDateTime dateTime = DateParser.parseDateTime(dateString, "dd/MM/yyyy HHmm");
+                                Task newTask = new Deadline(taskName, dateTime);
                                 Storage.storeTask(newTask);
                                 tasks.add(newTask);
                                 System.out.println("    ----------------------------------------");
                                 System.out.println("     Got it. I've added this task:");
                                 System.out.printf("       %s\n", newTask);
                                 System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                                System.out.println("    ----------------------------------------");
+                            } catch (DateTimeParseException e) {
+                                System.out.println("    ----------------------------------------");
+                                System.out.println("    Enter date in dd/MM/yyyy HHmm format");
+                                System.out.println("    ----------------------------------------");
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("    ----------------------------------------");
+                                System.out.println("    DateTime entered cannot be before today");
                                 System.out.println("    ----------------------------------------");
                             } catch (IOException e) {
                                 System.out.println("    ----------------------------------------");

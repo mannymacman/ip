@@ -32,7 +32,7 @@ public class Storage {
             if (taskParts[0].equals("T")) {
                 tasks.add(new Todo(taskParts[2], taskParts[1].equals("1")));
             } else if (taskParts[0].equals("D")) {
-                tasks.add(new Deadline(taskParts[2], taskParts[1].equals("1"), taskParts[3]));
+                tasks.add(new Deadline(taskParts[2], taskParts[1].equals("1"), DateParser.parseDateTime(taskParts[3], "MMM dd yyyy h:mma")));
             } else {
                 tasks.add(new Event(taskParts[2], taskParts[1].equals("1"), taskParts[3], taskParts[4]));
             }
