@@ -1,5 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -179,14 +181,28 @@ public class Della {
                             System.out.println("    Missing or invalid /by command. Pls try again");
                             System.out.println("    ----------------------------------------");
                         } else {
-                            Task newTask = new Deadline(contentParts[0], contentParts[1]);
                             try {
+                                String taskName = contentParts[0];
+                                String dateString = contentParts[1];
+                                LocalDateTime dateTime = DateParser.parseDateTime(dateString, "dd/MM/yyyy HHmm");
+                                if (dateTime.isBefore(LocalDateTime.now())) {
+                                    throw new IllegalArgumentException("DateTime cannot be before today");
+                                }
+                                Task newTask = new Deadline(taskName, dateTime);
                                 Storage.storeTask(newTask);
                                 tasks.add(newTask);
                                 System.out.println("    ----------------------------------------");
                                 System.out.println("     Got it. I've added this task:");
                                 System.out.printf("       %s\n", newTask);
                                 System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                                System.out.println("    ----------------------------------------");
+                            } catch (DateTimeParseException e) {
+                                System.out.println("    ----------------------------------------");
+                                System.out.println("    Enter date in dd/MM/yyyy HHmm format");
+                                System.out.println("    ----------------------------------------");
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("    ----------------------------------------");
+                                System.out.println("    DateTime entered cannot be before today");
                                 System.out.println("    ----------------------------------------");
                             } catch (IOException e) {
                                 System.out.println("    ----------------------------------------");
@@ -225,16 +241,36 @@ public class Della {
                                 System.out.println("    Missing or invalid /to command. Pls try again");
                                 System.out.println("    ----------------------------------------");
                             } else {
-                                String from = timeParts[0];
-                                String to = timeParts[1];
-                                Task newTask = new Event(taskName, from, to);
                                 try {
+                                    String fromDateString = timeParts[0];
+                                    String toDateString = timeParts[1];
+                                    LocalDateTime fromDateTime = DateParser.parseDateTime(fromDateString, "dd/MM/yyyy HHmm");
+                                    LocalDateTime toDateTime = DateParser.parseDateTime(toDateString, "dd/MM/yyyy HHmm");
+                                    if (fromDateTime.isBefore(LocalDateTime.now()) || fromDateTime.isBefore(LocalDateTime.now())) {
+                                        throw new IllegalArgumentException("DateTime cannot be before today");
+                                    }
+                                    if (toDateTime.isBefore(fromDateTime)) {
+                                        throw new InvalidEventDateException();
+                                    }
+                                    Task newTask = new Event(taskName, fromDateTime, toDateTime);
                                     Storage.storeTask(newTask);
                                     tasks.add(newTask);
                                     System.out.println("    ----------------------------------------");
                                     System.out.println("     Got it. I've added this task:");
                                     System.out.printf("       %s\n", newTask);
                                     System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
+                                    System.out.println("    ----------------------------------------");
+                                } catch (DateTimeParseException e) {
+                                    System.out.println("    ----------------------------------------");
+                                    System.out.println("    Enter date in dd/MM/yyyy HHmm format");
+                                    System.out.println("    ----------------------------------------");
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println("    ----------------------------------------");
+                                    System.out.println("    DateTime entered cannot be before today");
+                                    System.out.println("    ----------------------------------------");
+                                } catch (InvalidEventDateException e) {
+                                    System.out.println("    ----------------------------------------");
+                                    System.out.println("    /to DateTime must be before /by DateTime");
                                     System.out.println("    ----------------------------------------");
                                 } catch (IOException e) {
                                     System.out.println("    ----------------------------------------");
