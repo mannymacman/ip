@@ -160,22 +160,16 @@ public class Della {
                     if (content.isEmpty()) {
                         // catches if content is empty
                         // eg. user enters "event  " with trailing blank spaces
-                        System.out.println("    ----------------------------------------");
-                        System.out.println("    Bro, cannot add empty event");
-                        System.out.println("    ----------------------------------------");
+                        UI.showError("Bro, cannot add empty event");
                     } else {
                         String[] contentParts = content.split("\\s+/from\\s+");
                         if (contentParts.length == 1) {
-                            System.out.println("    ----------------------------------------");
-                            System.out.println("    Missing or invalid /from command. Pls try again");
-                            System.out.println("    ----------------------------------------");
+                            UI.showError("Missing or invalid /from command. Pls try again");
                         } else {
                             String taskName = contentParts[0];
                             String[] timeParts = contentParts[1].split("\\s+/to\\s+");
                             if (timeParts.length == 1) {
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("    Missing or invalid /to command. Pls try again");
-                                System.out.println("    ----------------------------------------");
+                                UI.showError("Missing or invalid /to command. Pls try again");
                             } else {
                                 try {
                                     String fromDateString = timeParts[0];
@@ -191,27 +185,15 @@ public class Della {
                                     Task newTask = new Event(taskName, fromDateTime, toDateTime);
                                     Storage.storeTask(newTask);
                                     tasks.add(newTask);
-                                    System.out.println("    ----------------------------------------");
-                                    System.out.println("     Got it. I've added this task:");
-                                    System.out.printf("       %s\n", newTask);
-                                    System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                                    System.out.println("    ----------------------------------------");
+                                    UI.showAddedTask(newTask, tasks.size());
                                 } catch (DateTimeParseException e) {
-                                    System.out.println("    ----------------------------------------");
-                                    System.out.println("    Enter date in dd/MM/yyyy HHmm format");
-                                    System.out.println("    ----------------------------------------");
+                                    UI.showError("Enter date in dd/MM/yyyy HHmm format");
                                 } catch (IllegalArgumentException e) {
-                                    System.out.println("    ----------------------------------------");
-                                    System.out.println("    DateTime entered cannot be before today");
-                                    System.out.println("    ----------------------------------------");
+                                    UI.showError("DateTime entered cannot be before today");
                                 } catch (InvalidEventDateException e) {
-                                    System.out.println("    ----------------------------------------");
-                                    System.out.println("    /to DateTime must be before /by DateTime");
-                                    System.out.println("    ----------------------------------------");
+                                    UI.showError("/to DateTime must be before /by DateTime");
                                 } catch (IOException e) {
-                                    System.out.println("    ----------------------------------------");
-                                    System.out.println("    Error when storing task");
-                                    System.out.println("    ----------------------------------------");
+                                    UI.showError("Error when storing task");
                                 }
                             }
                         }
@@ -219,9 +201,7 @@ public class Della {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // catches if content is empty
                     // eg. user enters "event" with no blank spaces
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Bro, cannot add empty event");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Bro, cannot add empty event");
                 }
             } else if (command == Command.DELETE) {
                 // unmark task
