@@ -132,16 +132,12 @@ public class Della {
                     if (content.isEmpty()) {
                         // catches if content is empty
                         // eg. user enters "deadline  " with trailing blank spaces
-                        System.out.println("    ----------------------------------------");
-                        System.out.println("    Bro, cannot add empty deadline");
-                        System.out.println("    ----------------------------------------");
+                        UI.showError("Bro, cannot add empty deadline");
                     } else {
                         String[] contentParts = content.split("\\s+/by\\s+");
                         // checks if user has entered valid /by command i.e. /by sunday
                         if (contentParts.length == 1) {
-                            System.out.println("    ----------------------------------------");
-                            System.out.println("    Missing or invalid /by command. Pls try again");
-                            System.out.println("    ----------------------------------------");
+                            UI.showError("Missing or invalid /by command. Pls try again");
                         } else {
                             try {
                                 String taskName = contentParts[0];
@@ -153,32 +149,20 @@ public class Della {
                                 Task newTask = new Deadline(taskName, dateTime);
                                 Storage.storeTask(newTask);
                                 tasks.add(newTask);
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("     Got it. I've added this task:");
-                                System.out.printf("       %s\n", newTask);
-                                System.out.printf("     Now you have %d tasks in the list.\n", tasks.size());
-                                System.out.println("    ----------------------------------------");
+                                UI.showAddedTask(newTask, tasks.size());
                             } catch (DateTimeParseException e) {
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("    Enter date in dd/MM/yyyy HHmm format");
-                                System.out.println("    ----------------------------------------");
+                                UI.showError("Enter date in dd/MM/yyyy HHmm format");
                             } catch (IllegalArgumentException e) {
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("    DateTime entered cannot be before today");
-                                System.out.println("    ----------------------------------------");
+                                UI.showError("DateTime entered cannot be before today");
                             } catch (IOException e) {
-                                System.out.println("    ----------------------------------------");
-                                System.out.println("    Error when storing task");
-                                System.out.println("    ----------------------------------------");
+                                UI.showError("Error when storing task");
                             }
                         }
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // catches if content is empty
                     // eg. user enters "deadline" with no blank spaces
-                    System.out.println("    ----------------------------------------");
-                    System.out.println("    Bro, cannot add empty deadline");
-                    System.out.println("    ----------------------------------------");
+                    UI.showError("Bro, cannot add empty deadline");
                 }
             } else if (command == Command.EVENT) {
                 try {

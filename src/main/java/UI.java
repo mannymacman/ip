@@ -49,4 +49,12 @@ public class UI {
         System.out.println("      unmarked: " + task);
         System.out.println("    ----------------------------------------");
     }
+
+    public static void showAddedTask(Task newTask, int numTasks) {
+        System.out.println("    ----------------------------------------");
+        System.out.println("     Got it. I've added this task:");
+        System.out.printf("       %s\n", newTask);
+        System.out.printf("     Now you have %d tasks in the list.\n", numTasks);
+        System.out.println("    ----------------------------------------");
+    }
 }
