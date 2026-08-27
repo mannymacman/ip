@@ -1,16 +1,19 @@
 package della.parser;
 
+import java.time.LocalDateTime;
+
 import della.command.Command;
 import della.task.Deadline;
 import della.task.Event;
 import della.task.Todo;
 import della.util.DateParser;
-import java.time.LocalDateTime;
 
 /**
  * Parses user input into commands, task details, and task objects.
  */
 public class Parser {
+    private Parser() {
+    }
 
     /**
      * Returns the command represented by the first word of the input.
@@ -19,24 +22,19 @@ public class Parser {
      * @return Corresponding command, or {@code UNKNOWN} when the command is unrecognised.
      */
     public static Command parseCommand(String input) {
-        // Returns Command Enum
         String[] inputParts = input.split("\\s+", 2);
 
-        Command command;
-
-        switch (inputParts[0]) {
-            case "bye" -> command = Command.BYE;
-            case "list" -> command = Command.LIST;
-            case "mark" -> command = Command.MARK;
-            case "unmark" -> command = Command.UNMARK;
-            case "todo" -> command = Command.TODO;
-            case "deadline" -> command = Command.DEADLINE;
-            case "event" -> command = Command.EVENT;
-            case "delete" -> command = Command.DELETE;
-            default -> command = Command.UNKNOWN;
-        }
-
-        return command;
+        return switch (inputParts[0]) {
+            case "bye" -> Command.BYE;
+            case "list" -> Command.LIST;
+            case "mark" -> Command.MARK;
+            case "unmark" -> Command.UNMARK;
+            case "todo" -> Command.TODO;
+            case "deadline" -> Command.DEADLINE;
+            case "event" -> Command.EVENT;
+            case "delete" -> Command.DELETE;
+            default -> Command.UNKNOWN;
+        };
     }
 
     /**
@@ -46,7 +44,6 @@ public class Parser {
      * @return Arguments following the command word.
      */
     public static String parseArguments(String input) {
-        // Returns everything after the command word.
         String[] inputParts = input.split("\\s+", 2);
         return inputParts[1];
     }
@@ -59,7 +56,6 @@ public class Parser {
      * @throws NumberFormatException If the argument is not a valid integer.
      */
     public static int parseTaskNumber(String argument) throws NumberFormatException {
-        // Converts "3" into 3 for mark, unmark, and delete.
         return Integer.parseInt(argument);
     }
 
@@ -71,10 +67,7 @@ public class Parser {
      * @throws IllegalArgumentException If the description is empty.
      */
     public static Todo parseTodo(String argument) throws IllegalArgumentException {
-        // Converts "read book" into a Todo object.
         if (argument.isEmpty()) {
-            // catches if content is empty
-            // eg. user enters "todo  " with trailing blank spaces
             throw new IllegalArgumentException("Cannot add empty todo task!");
         }
         return new Todo(argument);
@@ -85,7 +78,8 @@ public class Parser {
      *
      * @param argument Deadline description followed by {@code /by dd/MM/yyyy HHmm}.
      * @return Deadline task with the specified description and date.
-     * @throws IllegalArgumentException If the description or {@code /by} date is missing, or the date is in the past.
+     * @throws IllegalArgumentException If the description or {@code /by} date is missing,
+     *                                  or the date is in the past.
      * @throws java.time.format.DateTimeParseException If the date does not match the required format.
      */
     public static Deadline parseDeadline(String argument) throws IllegalArgumentException {
@@ -93,7 +87,6 @@ public class Parser {
             throw new IllegalArgumentException("Bro, cannot add empty deadline!");
         }
 
-        // Extracts description and /by date, then creates a Deadline.
         String[] argumentParts = argument.split("\\s+/by\\s+");
 
         if (argumentParts.length == 1) {
@@ -112,16 +105,17 @@ public class Parser {
     /**
      * Returns an event task created from a description, start time, and end time.
      *
-     * @param argument Event description followed by {@code /from} and {@code /to} dates in {@code dd/MM/yyyy HHmm} format.
+     * @param argument Event description followed by {@code /from} and {@code /to} dates
+     *                 in {@code dd/MM/yyyy HHmm} format.
      * @return Event task with the specified description and time range.
-     * @throws IllegalArgumentException If a required marker is missing, a date is in the past, or the end time is before the start time.
+     * @throws IllegalArgumentException If a required marker is missing, a date is in the past,
+     *                                  or the end time is before the start time.
      * @throws java.time.format.DateTimeParseException If either date does not match the required format.
      */
     public static Event parseEvent(String argument) throws IllegalArgumentException {
         if (argument.isEmpty()) {
             throw new IllegalArgumentException("Bro, cannot add empty event!");
         }
-        // Extracts description, /from date, and /to date, then creates an Event.
         String[] argumentParts = argument.split("\\s+/from\\s+");
 
         if (argumentParts.length == 1) {
@@ -131,7 +125,6 @@ public class Parser {
         String taskName = argumentParts[0];
         String[] timeParts = argumentParts[1].split("\\s+/to\\s+");
 
-        // throw customer exception if timeParts length == 1
         if (timeParts.length == 1) {
             throw new IllegalArgumentException("Missing or invalid /to command. Pls try again");
         }
