@@ -1,19 +1,20 @@
 package della.storage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 import della.task.Deadline;
 import della.task.Event;
 import della.task.Task;
 import della.task.Todo;
 import della.util.DateParser;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
 
 /**
  * Stores tasks in and retrieves tasks from a file.
@@ -37,10 +38,10 @@ public class Storage {
      * @throws IOException If the storage file cannot be written.
      */
     public void storeTask(Task task) throws IOException {
-        FileWriter fw = new FileWriter(this.filePath, true);
-        fw.write(task.formatForStorage());
-        fw.write("\n");
-        fw.close();
+        try (FileWriter fileWriter = new FileWriter(this.filePath, true)) {
+            fileWriter.write(task.formatForStorage());
+            fileWriter.write("\n");
+        }
     }
 
     /**
@@ -61,31 +62,32 @@ public class Storage {
      * @throws java.time.format.DateTimeParseException If a stored deadline or event date has an invalid format.
      */
     public ArrayList<Task> loadTasks() throws FileNotFoundException {
-        File f = new File(this.filePath);
+        File storageFile = new File(this.filePath);
         ArrayList<Task> tasks = new ArrayList<>();
-        Scanner s = new Scanner(f);
 
-        while (s.hasNext()) {
-            String taskLine = s.nextLine();
-            String[] taskParts = taskLine.split("\\|");
-            if (taskParts[0].equals("T")) {
-                tasks.add(new Todo(taskParts[2], taskParts[1].equals("1")));
-            } else if (taskParts[0].equals("D")) {
-                tasks.add(
-                        new Deadline(
-                                taskParts[2],
-                                taskParts[1].equals("1"),
-                                DateParser.parseDateTime(taskParts[3], "MMM dd yyyy h:mma")));
-            } else {
-                tasks.add(
-                        new Event(
-                                taskParts[2],
-                                taskParts[1].equals("1"),
-                                DateParser.parseDateTime(taskParts[3], "MMM dd yyyy h:mma"),
-                                DateParser.parseDateTime(taskParts[4], "MMM dd yyyy h:mma")));
+        try (Scanner scanner = new Scanner(storageFile)) {
+            while (scanner.hasNext()) {
+                String taskLine = scanner.nextLine();
+                String[] taskParts = taskLine.split("\\|");
+                if (taskParts[0].equals("T")) {
+                    tasks.add(new Todo(taskParts[2], taskParts[1].equals("1")));
+                } else if (taskParts[0].equals("D")) {
+                    tasks.add(
+                            new Deadline(
+                                    taskParts[2],
+                                    taskParts[1].equals("1"),
+                                    DateParser.parseDateTime(taskParts[3], "MMM dd yyyy h:mma")));
+                } else {
+                    tasks.add(
+                            new Event(
+                                    taskParts[2],
+                                    taskParts[1].equals("1"),
+                                    DateParser.parseDateTime(taskParts[3], "MMM dd yyyy h:mma"),
+                                    DateParser.parseDateTime(taskParts[4], "MMM dd yyyy h:mma")));
+                }
             }
         }
-        s.close();
+
         return tasks;
     }
 

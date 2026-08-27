@@ -1,7 +1,8 @@
 package della.ui;
 
-import della.task.Task;
 import java.util.ArrayList;
+
+import della.task.Task;
 
 /**
  * Displays messages and task information to the user.
