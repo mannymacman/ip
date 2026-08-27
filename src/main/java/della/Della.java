@@ -3,6 +3,7 @@ package della;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import della.command.Command;
@@ -150,6 +151,16 @@ public class Della {
                     UI.showError(String.format("You only have %d task(s). Try again", taskList.size()));
                 } catch (IOException e) {
                     UI.showError("Error in deleting task in storage");
+                }
+            } else if (command == Command.FIND) {
+                try {
+                    String argument = Parser.parseArguments(input);
+                    ArrayList<Task> searchResult = Parser.parseFindTask(argument, taskList.getTasks());
+                    UI.showTasks(searchResult);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    UI.showError("Bro, cannot find nothing");
+                } catch (IllegalArgumentException e) {
+                    UI.showError(e.getMessage());
                 }
             } else {
                 UI.showError("I don't recognise this command :( Try again pls tyvm");

@@ -20,6 +20,8 @@ public enum Command {
     EVENT,
     /** Deletes a task. */
     DELETE,
+    /** Finds a task. */
+    FIND,
     /** Represents an unrecognised command. */
     UNKNOWN
 }

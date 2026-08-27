@@ -1,10 +1,12 @@
 package della.parser;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import della.command.Command;
 import della.task.Deadline;
 import della.task.Event;
+import della.task.Task;
 import della.task.Todo;
 import della.util.DateParser;
 
@@ -33,6 +35,7 @@ public class Parser {
             case "deadline" -> Command.DEADLINE;
             case "event" -> Command.EVENT;
             case "delete" -> Command.DELETE;
+            case "find" -> Command.FIND;
             default -> Command.UNKNOWN;
         };
     }
@@ -140,5 +143,33 @@ public class Parser {
             throw new IllegalArgumentException("/to DateTime must be before /by DateTime");
         }
         return new Event(taskName, fromDateTime, toDateTime);
+    }
+
+    /**
+     * Returns search result for input keyword.
+     *
+     * @param argument Keyword to search for.
+     * @return Tasks with keyword in their description.
+     * @throws IllegalArgumentException If the keyword is empty.
+     */
+    public static ArrayList<Task> parseFindTask(String argument, ArrayList<Task> taskList) throws IllegalArgumentException {
+        if (argument.isEmpty()) {
+            throw new IllegalArgumentException("Cannot find nothing!");
+        }
+
+        ArrayList<Task> res = new ArrayList<>();
+
+        for (Task task : taskList) {
+            String taskName = task.getName();
+            String[] nameParts = taskName.split("\\s+");
+            for (String part : nameParts) {
+                if (part.equals(argument)) {
+                    res.add(task);
+                    break;
+                }
+            }
+        }
+
+        return res;
     }
 }

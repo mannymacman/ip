@@ -23,6 +23,10 @@ public abstract class Task {
         this.name = name;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     /**
      * Marks this task as complete.
      */
