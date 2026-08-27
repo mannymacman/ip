@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Stores and manages the chatbot's tasks.
+ * Manages an ordered collection of tasks.
  */
 public class TaskList {
     private final ArrayList<Task> tasks;
@@ -17,14 +17,18 @@ public class TaskList {
     }
 
     /**
-     * Creates a task list containing tasks loaded from storage.
+     * Creates a task list containing the specified tasks.
+     *
+     * @param tasks Tasks used to initialise the task list.
      */
     public TaskList(List<Task> tasks) {
         this.tasks = new ArrayList<>(tasks);
     }
 
     /**
-     * Adds a task to the list.
+     * Adds a task to the end of this task list.
+     *
+     * @param task Task to add.
      */
     public void add(Task task) {
         tasks.add(task);
@@ -32,20 +36,32 @@ public class TaskList {
 
     /**
      * Returns the task at the specified zero-based index.
+     *
+     * @param index Zero-based position of the task.
+     * @return Task at the specified index.
+     * @throws IndexOutOfBoundsException If the index is outside this task list.
      */
     public Task get(int index) {
         return tasks.get(index);
     }
 
     /**
-     * Removes and returns the task at the specified zero-based index.
+     * Deletes and returns the task at the specified zero-based index.
+     *
+     * @param index Zero-based position of the task.
+     * @return Deleted task.
+     * @throws IndexOutOfBoundsException If the index is outside this task list.
      */
     public Task delete(int index) {
         return tasks.remove(index);
     }
 
     /**
-     * Marks the specified task as complete and returns it.
+     * Marks and returns the task at the specified zero-based index.
+     *
+     * @param index Zero-based position of the task.
+     * @return Task after it is marked as complete.
+     * @throws IndexOutOfBoundsException If the index is outside this task list.
      */
     public Task mark(int index) {
         Task task = tasks.get(index);
@@ -54,7 +70,11 @@ public class TaskList {
     }
 
     /**
-     * Marks the specified task as incomplete and returns it.
+     * Marks and returns the task at the specified zero-based index as incomplete.
+     *
+     * @param index Zero-based position of the task.
+     * @return Task after it is marked as incomplete.
+     * @throws IndexOutOfBoundsException If the index is outside this task list.
      */
     public Task unmark(int index) {
         Task task = tasks.get(index);
@@ -63,14 +83,18 @@ public class TaskList {
     }
 
     /**
-     * Returns the number of tasks currently stored.
+     * Returns the number of tasks in this task list.
+     *
+     * @return Number of tasks in this task list.
      */
     public int size() {
         return tasks.size();
     }
 
     /**
-     * Returns a copy of the tasks for displaying or saving.
+     * Returns a copy of the tasks in this task list.
+     *
+     * @return Copy of the tasks in their current order.
      */
     public ArrayList<Task> getTasks() {
         return new ArrayList<>(List.copyOf(tasks));

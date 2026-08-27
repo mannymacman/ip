@@ -7,8 +7,17 @@ import della.task.Todo;
 import della.util.DateParser;
 import java.time.LocalDateTime;
 
+/**
+ * Parses user input into commands, task details, and task objects.
+ */
 public class Parser {
 
+    /**
+     * Returns the command represented by the first word of the input.
+     *
+     * @param input User input containing a command and optional arguments.
+     * @return Corresponding command, or {@code UNKNOWN} when the command is unrecognised.
+     */
     public static Command parseCommand(String input) {
         // Returns Command Enum
         String[] inputParts = input.split("\\s+", 2);
@@ -30,18 +39,38 @@ public class Parser {
         return command;
     }
 
+    /**
+     * Returns the text following the command word in the input.
+     *
+     * @param input User input containing a command followed by arguments.
+     * @return Arguments following the command word.
+     */
     public static String parseArguments(String input) {
         // Returns everything after the command word.
         String[] inputParts = input.split("\\s+", 2);
         return inputParts[1];
     }
 
+    /**
+     * Returns the task number represented by the argument.
+     *
+     * @param argument Text expected to contain a whole-number task number.
+     * @return Parsed task number.
+     * @throws NumberFormatException If the argument is not a valid integer.
+     */
     public static int parseTaskNumber(String argument) throws NumberFormatException {
         // Converts "3" into 3 for mark, unmark, and delete.
         return Integer.parseInt(argument);
     }
 
-    public static Todo parseTodo(String argument) throws IllegalArgumentException{
+    /**
+     * Returns a todo task created from the argument.
+     *
+     * @param argument Description of the todo task.
+     * @return Todo task with the specified description.
+     * @throws IllegalArgumentException If the description is empty.
+     */
+    public static Todo parseTodo(String argument) throws IllegalArgumentException {
         // Converts "read book" into a Todo object.
         if (argument.isEmpty()) {
             // catches if content is empty
@@ -51,6 +80,14 @@ public class Parser {
         return new Todo(argument);
     }
 
+    /**
+     * Returns a deadline task created from a description and a {@code /by} date.
+     *
+     * @param argument Deadline description followed by {@code /by dd/MM/yyyy HHmm}.
+     * @return Deadline task with the specified description and date.
+     * @throws IllegalArgumentException If the description or {@code /by} date is missing, or the date is in the past.
+     * @throws java.time.format.DateTimeParseException If the date does not match the required format.
+     */
     public static Deadline parseDeadline(String argument) throws IllegalArgumentException {
         if (argument.isEmpty()) {
             throw new IllegalArgumentException("Bro, cannot add empty deadline!");
@@ -72,6 +109,14 @@ public class Parser {
         return new Deadline(taskName, dateTime);
     }
 
+    /**
+     * Returns an event task created from a description, start time, and end time.
+     *
+     * @param argument Event description followed by {@code /from} and {@code /to} dates in {@code dd/MM/yyyy HHmm} format.
+     * @return Event task with the specified description and time range.
+     * @throws IllegalArgumentException If a required marker is missing, a date is in the past, or the end time is before the start time.
+     * @throws java.time.format.DateTimeParseException If either date does not match the required format.
+     */
     public static Event parseEvent(String argument) throws IllegalArgumentException {
         if (argument.isEmpty()) {
             throw new IllegalArgumentException("Bro, cannot add empty event!");

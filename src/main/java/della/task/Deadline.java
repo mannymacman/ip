@@ -3,14 +3,30 @@ package della.task;
 import della.util.DateParser;
 import java.time.LocalDateTime;
 
+/**
+ * Represents a task that must be completed by a specified date and time.
+ */
 public class Deadline extends Task {
     private LocalDateTime by;
 
+    /**
+     * Creates an incomplete deadline task with the specified name and deadline.
+     *
+     * @param name Description of the deadline task.
+     * @param by Date and time by which the task is due.
+     */
     public Deadline(String name, LocalDateTime by) {
         super(name);
         this.by = by;
     }
 
+    /**
+     * Creates a deadline task with the specified name, completion status, and deadline.
+     *
+     * @param name Description of the deadline task.
+     * @param isDone Completion status of the deadline task.
+     * @param by Date and time by which the task is due.
+     */
     public Deadline(String name, boolean isDone, LocalDateTime by) {
         super(name);
         this.isDone = isDone;
