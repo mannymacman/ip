@@ -3,7 +3,16 @@ package della.ui;
 import della.task.Task;
 import java.util.ArrayList;
 
+/**
+ * Displays messages and task information to the user.
+ */
 public class UI {
+    private UI() {
+    }
+
+    /**
+     * Displays the welcome banner and greeting.
+     */
     public static void showWelcome() {
         String banner =
                 "   DDDD   eeee  l      l       aaaa\n" +
@@ -19,18 +28,31 @@ public class UI {
         System.out.println("========================================");
     }
 
+    /**
+     * Displays the farewell message.
+     */
     public static void showFarewell() {
         String farewell = "Byee! Rest well!";
         System.out.println("========================================");
         System.out.println(farewell);
     }
 
+    /**
+     * Displays an error message between separator lines.
+     *
+     * @param errorMsg Error message to display.
+     */
     public static void showError(String errorMsg) {
         System.out.println("    ----------------------------------------");
         System.out.printf("    %s\n", errorMsg);
         System.out.println("    ----------------------------------------");
     }
 
+    /**
+     * Displays the tasks in a numbered list.
+     *
+     * @param taskList Tasks to display.
+     */
     public static void showTasks(ArrayList<Task> taskList) {
         System.out.println("    ----------------------------------------");
         for (int i = 0; i < taskList.size(); i++) {
@@ -39,6 +61,11 @@ public class UI {
         System.out.println("    ----------------------------------------");
     }
 
+    /**
+     * Displays confirmation that a task has been marked as complete.
+     *
+     * @param task Task that was marked as complete.
+     */
     public static void showMarkedTask(Task task) {
         System.out.println("    ----------------------------------------");
         System.out.println("    Nice! I have marked this task as done:");
@@ -46,6 +73,11 @@ public class UI {
         System.out.println("    ----------------------------------------");
     }
 
+    /**
+     * Displays confirmation that a task has been marked as incomplete.
+     *
+     * @param task Task that was marked as incomplete.
+     */
     public static void showUnmarkedTask(Task task) {
         System.out.println("    ----------------------------------------");
         System.out.println("    OK, I've marked this task as not done yet:");
@@ -53,6 +85,12 @@ public class UI {
         System.out.println("    ----------------------------------------");
     }
 
+    /**
+     * Displays confirmation that a task has been added.
+     *
+     * @param newTask Task that was added.
+     * @param numTasks Total number of tasks after the addition.
+     */
     public static void showAddedTask(Task newTask, int numTasks) {
         System.out.println("    ----------------------------------------");
         System.out.println("     Got it. I've added this task:");
@@ -61,6 +99,12 @@ public class UI {
         System.out.println("    ----------------------------------------");
     }
 
+    /**
+     * Displays confirmation that a task has been deleted.
+     *
+     * @param task Task that was deleted.
+     * @param numTasks Total number of tasks after the deletion.
+     */
     public static void showDeletedTask(Task task, int numTasks) {
         System.out.println("    ----------------------------------------");
         System.out.println("    Noted. I've removed this task:");

@@ -15,13 +15,27 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * Stores tasks in and retrieves tasks from a file.
+ */
 public class Storage {
     private final String filePath;
 
+    /**
+     * Creates storage that uses the specified file path.
+     *
+     * @param filePath Path of the file used to store tasks.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Adds a task to the end of the storage file.
+     *
+     * @param task Task to store.
+     * @throws IOException If the storage file cannot be written.
+     */
     public void storeTask(Task task) throws IOException {
         FileWriter fw = new FileWriter(this.filePath, true);
         fw.write(task.formatForStorage());
@@ -29,11 +43,23 @@ public class Storage {
         fw.close();
     }
 
+    /**
+     * Returns whether the storage file exists and contains task data.
+     *
+     * @return {@code true} if the storage file contains stored tasks, otherwise {@code false}.
+     */
     public boolean hasData() {
         File file = new File(this.filePath);
         return file.exists() && file.length() > 0;
     }
 
+    /**
+     * Returns tasks reconstructed from the storage file.
+     *
+     * @return Tasks read from the storage file in their stored order.
+     * @throws FileNotFoundException If the storage file does not exist.
+     * @throws java.time.format.DateTimeParseException If a stored deadline or event date has an invalid format.
+     */
     public ArrayList<Task> loadTasks() throws FileNotFoundException {
         File f = new File(this.filePath);
         ArrayList<Task> tasks = new ArrayList<>();
@@ -63,6 +89,13 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Updates the stored task at the specified one-based task number.
+     *
+     * @param taskNum One-based position of the task to update.
+     * @param task Updated task to store at the specified position.
+     * @throws IOException If the storage file cannot be read or written.
+     */
     public void updateTaskStatus(int taskNum, Task task) throws IOException {
         Path filePath = Path.of(this.filePath);
         List<String> taskLines = Files.readAllLines(filePath);
@@ -71,6 +104,12 @@ public class Storage {
         Files.write(filePath, taskLines);
     }
 
+    /**
+     * Deletes the stored task at the specified one-based task number.
+     *
+     * @param taskNum One-based position of the task to delete.
+     * @throws IOException If the storage file cannot be read or written.
+     */
     public void deleteTask(int taskNum) throws IOException {
         Path filePath = Path.of(this.filePath);
         List<String> taskLines = Files.readAllLines(filePath);
