@@ -152,17 +152,20 @@ public class Parser {
      * @return Tasks with keyword in their description.
      * @throws IllegalArgumentException If the keyword is empty.
      */
-    public static ArrayList<Task> parseFindTask(String argument, ArrayList<Task> taskList) throws IllegalArgumentException {
+    public static ArrayList<Task> parseFindTask(
+            String argument, ArrayList<Task> tasks) throws IllegalArgumentException {
         if (argument.isEmpty()) {
             throw new IllegalArgumentException("Cannot find nothing!");
         }
 
         ArrayList<Task> res = new ArrayList<>();
 
-        for (Task task : taskList) {
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
             String taskName = task.getName();
             String[] nameParts = taskName.split("\\s+");
-            for (String part : nameParts) {
+            for (int j = 0; j < nameParts.length; j++) {
+                String part = nameParts[j];
                 if (part.equals(argument)) {
                     res.add(task);
                     break;
