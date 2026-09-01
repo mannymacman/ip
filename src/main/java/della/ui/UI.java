@@ -16,11 +16,11 @@ public class UI {
      */
     public static void showWelcome() {
         String banner =
-                "   DDDD   eeee  l      l       aaaa\n" +
-                        "   D   D  e     l      l      a    a\n" +
-                        "   D   D  eee   l      l      aaaaaa\n" +
-                        "   D   D  e     l      l      a    a\n" +
-                        "   DDDD   eeee  llll   llll   a    a";
+                "   DDDD   eeee  l      l       aaaa\n"
+                        + "   D   D  e     l      l      a    a\n"
+                        + "   D   D  eee   l      l      aaaaaa\n"
+                        + "   D   D  e     l      l      a    a\n"
+                        + "   DDDD   eeee  llll   llll   a    a";
         String greeting = "Hi! I'm Della :))\nHow can I help you?";
 
         System.out.println(banner);

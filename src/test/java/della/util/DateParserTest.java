@@ -20,13 +20,13 @@ public class DateParserTest {
 
     @Test
     public void parseDateTime_invalidTime_exceptionThrown() {
-        assertThrows(DateTimeParseException.class,
-                () -> DateParser.parseDateTime("26/08/2026 14:60", "dd/MM/yyyy HH:mm"));
+        assertThrows(
+                DateTimeParseException.class, () -> DateParser.parseDateTime("26/08/2026 14:60", "dd/MM/yyyy HH:mm"));
     }
 
     @Test
     public void parseDateTime_inputDoesNotMatchPattern_exceptionThrown() {
-        assertThrows(DateTimeParseException.class,
-                () -> DateParser.parseDateTime("2026-08-26 14:30", "dd/MM/yyyy HH:mm"));
+        assertThrows(
+                DateTimeParseException.class, () -> DateParser.parseDateTime("2026-08-26 14:30", "dd/MM/yyyy HH:mm"));
     }
 }
