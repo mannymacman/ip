@@ -170,6 +170,13 @@ public class Della {
     }
 
     /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        return "Della heard: " + input;
+    }
+
+    /**
      * Starts the Della application.
      *
      * @param args Command-line arguments, which are currently ignored.
