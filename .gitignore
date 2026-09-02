@@ -31,5 +31,3 @@ text-ui-test/EXPECTED-UNIX.TXT
 
 data/della.txt
 
-# Run experiments
-Test.java
