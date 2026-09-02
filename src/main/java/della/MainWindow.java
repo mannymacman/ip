@@ -7,6 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
+import della.ui.UI;
 /**
  * Controller for the main GUI.
  */
@@ -25,15 +27,17 @@ public class MainWindow extends AnchorPane {
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.png"));
     private Image dellaImage = new Image(this.getClass().getResourceAsStream("/images/della.png"));
 
-    @FXML
-    public void initialize() {
-        scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-    }
-
     /** Injects the Della instance */
     public void setDella(Della d) {
         this.della = d;
     }
+
+    @FXML
+    public void initialize() {
+        scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        dialogContainer.getChildren().add(DialogBox.getDukeDialog(UI.showWelcome(), dellaImage));
+    }
+
 
     /**
      * Creates two dialog boxes, one echoing user input and the other containing Della's reply and then appends them to

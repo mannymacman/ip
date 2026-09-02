@@ -14,39 +14,24 @@ public class UI {
     /**
      * Displays the welcome banner and greeting.
      */
-    public static void showWelcome() {
-        String banner =
-                "   DDDD   eeee  l      l       aaaa\n"
-                        + "   D   D  e     l      l      a    a\n"
-                        + "   D   D  eee   l      l      aaaaaa\n"
-                        + "   D   D  e     l      l      a    a\n"
-                        + "   DDDD   eeee  llll   llll   a    a";
-        String greeting = "Hi! I'm Della :))\nHow can I help you?";
-
-        System.out.println(banner);
-        System.out.println("========================================");
-        System.out.println(greeting);
-        System.out.println("========================================");
+    public static String showWelcome() {
+        return "Hi! I'm Della :))\nHow can I help you?";
     }
 
     /**
      * Displays the farewell message.
      */
-    public static void showFarewell() {
-        String farewell = "Byee! Rest well!";
-        System.out.println("========================================");
-        System.out.println(farewell);
+    public static String showFarewell() {
+        return "Byee! Rest well!";
     }
 
     /**
-     * Displays an error message between separator lines.
+     * Returns an error message.
      *
      * @param errorMsg Error message to display.
      */
-    public static void showError(String errorMsg) {
-        System.out.println("    ----------------------------------------");
-        System.out.printf("    %s\n", errorMsg);
-        System.out.println("    ----------------------------------------");
+    public static String showError(String errorMsg) {
+        return errorMsg;
     }
 
     /**
@@ -54,12 +39,12 @@ public class UI {
      *
      * @param taskList Tasks to display.
      */
-    public static void showTasks(ArrayList<Task> taskList) {
-        System.out.println("    ----------------------------------------");
+    public static String showTasks(ArrayList<Task> taskList) {
+        StringBuilder output = new StringBuilder();
         for (int i = 0; i < taskList.size(); i++) {
-            System.out.printf("    %d. %s\n", i + 1, taskList.get(i));
+            output.append(String.format("%d. %s\n", i + 1, taskList.get(i)));
         }
-        System.out.println("    ----------------------------------------");
+        return output.toString().stripTrailing();
     }
 
     /**
@@ -67,11 +52,8 @@ public class UI {
      *
      * @param task Task that was marked as complete.
      */
-    public static void showMarkedTask(Task task) {
-        System.out.println("    ----------------------------------------");
-        System.out.println("    Nice! I have marked this task as done:");
-        System.out.println("      marked: " + task);
-        System.out.println("    ----------------------------------------");
+    public static String showMarkedTask(Task task) {
+        return "Nice! I have marked this task as done:\n" + task;
     }
 
     /**
@@ -79,11 +61,8 @@ public class UI {
      *
      * @param task Task that was marked as incomplete.
      */
-    public static void showUnmarkedTask(Task task) {
-        System.out.println("    ----------------------------------------");
-        System.out.println("    OK, I've marked this task as not done yet:");
-        System.out.println("      unmarked: " + task);
-        System.out.println("    ----------------------------------------");
+    public static String showUnmarkedTask(Task task) {
+        return "OK, I've marked this task as not done yet:\n" + task;
     }
 
     /**
@@ -92,12 +71,10 @@ public class UI {
      * @param newTask Task that was added.
      * @param numTasks Total number of tasks after the addition.
      */
-    public static void showAddedTask(Task newTask, int numTasks) {
-        System.out.println("    ----------------------------------------");
-        System.out.println("     Got it. I've added this task:");
-        System.out.printf("       %s\n", newTask);
-        System.out.printf("     Now you have %d tasks in the list.\n", numTasks);
-        System.out.println("    ----------------------------------------");
+    public static String showAddedTask(Task newTask, int numTasks) {
+        return String.format(
+                "Got it. I've added this task:\n%s\now you have %d tasks in the list.",
+                newTask, numTasks);
     }
 
     /**
@@ -106,11 +83,9 @@ public class UI {
      * @param task Task that was deleted.
      * @param numTasks Total number of tasks after the deletion.
      */
-    public static void showDeletedTask(Task task, int numTasks) {
-        System.out.println("    ----------------------------------------");
-        System.out.println("    Noted. I've removed this task:");
-        System.out.println("      " + task);
-        System.out.printf("    Now you have %d tasks in the list.\n", numTasks);
-        System.out.println("    ----------------------------------------");
+    public static String showDeletedTask(Task task, int numTasks) {
+        return String.format(
+                "Noted. I've removed this task:\n%s\nNow you have %d tasks in the list.",
+                task, numTasks);
     }
 }
