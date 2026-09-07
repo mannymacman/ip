@@ -20,6 +20,8 @@ public class Event extends Task {
      */
     public Event(String name, LocalDateTime from, LocalDateTime to) {
         super(name);
+        assert from != null && to != null : "Event timestamps must not be null";
+        assert !to.isBefore(from) : "Event end timestamp must not precede its start timestamp";
         this.startDateTime = from;
         this.endDateTime = to;
     }
@@ -34,6 +36,8 @@ public class Event extends Task {
      */
     public Event(String name, boolean isDone, LocalDateTime from, LocalDateTime to) {
         super(name);
+        assert from != null && to != null : "Event timestamps must not be null";
+        assert !to.isBefore(from) : "Event end timestamp must not precede its start timestamp";
         this.isDone = isDone;
         this.startDateTime = from;
         this.endDateTime = to;

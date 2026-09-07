@@ -47,6 +47,7 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     private void handleUserInput() {
+        assert della != null : "Della must be injected before handling user input";
         String input = userInput.getText();
         String response = della.getResponse(input);
         dialogContainer.getChildren().addAll(
