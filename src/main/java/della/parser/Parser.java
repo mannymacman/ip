@@ -137,7 +137,7 @@ public class Parser {
         String toDateString = timeParts[1];
         LocalDateTime fromDateTime = DateParser.parseDateTime(fromDateString, "dd/MM/yyyy HHmm");
         LocalDateTime toDateTime = DateParser.parseDateTime(toDateString, "dd/MM/yyyy HHmm");
-        if (fromDateTime.isBefore(LocalDateTime.now()) || fromDateTime.isBefore(LocalDateTime.now())) {
+        if (fromDateTime.isBefore(LocalDateTime.now()) || toDateTime.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("DateTime entered cannot be before today");
         }
         if (toDateTime.isBefore(fromDateTime)) {
