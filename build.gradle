@@ -57,7 +57,7 @@ checkstyle {
 }
 
 application {
-    mainClass.set("Launcher")
+    mainClass.set("della.Launcher")
 }
 
 jar {
