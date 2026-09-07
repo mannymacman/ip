@@ -48,6 +48,7 @@ public class Parser {
      */
     public static String parseArguments(String input) {
         String[] inputParts = input.split("\\s+", 2);
+        assert inputParts.length == 2 : "Input must contain a command and its arguments";
         return inputParts[1];
     }
 

@@ -102,6 +102,7 @@ public class Storage {
         Path filePath = Path.of(this.filePath);
         List<String> taskLines = Files.readAllLines(filePath);
         int lineIndex = taskNum - 1;
+        assert lineIndex >= 0 && lineIndex < taskLines.size() : "Task number must identify an existing storage entry";
         taskLines.set(lineIndex, task.formatForStorage());
         Files.write(filePath, taskLines);
     }
@@ -116,6 +117,7 @@ public class Storage {
         Path filePath = Path.of(this.filePath);
         List<String> taskLines = Files.readAllLines(filePath);
         int lineIndex = taskNum - 1;
+        assert lineIndex >= 0 && lineIndex < taskLines.size() : "Task number must identify an existing storage entry";
         taskLines.remove(lineIndex);
         Files.write(filePath, taskLines);
     }

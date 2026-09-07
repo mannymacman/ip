@@ -10,6 +10,7 @@ src/main/resources/docs/
 
 .gradle-user-home/
 .gradle/
+.gradle-test-cache/
 build/
 
 *.jar

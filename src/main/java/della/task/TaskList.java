@@ -22,6 +22,8 @@ public class TaskList {
      * @param tasks Tasks used to initialise the task list.
      */
     public TaskList(List<Task> tasks) {
+        assert tasks != null : "Initial task collection must not be null";
+        assert tasks.stream().allMatch(task -> task != null) : "Initial task collection must not contain null tasks";
         this.tasks = new ArrayList<>(tasks);
     }
 
@@ -31,6 +33,7 @@ public class TaskList {
      * @param task Task to add.
      */
     public void add(Task task) {
+        assert task != null : "Task list must not contain null tasks";
         tasks.add(task);
     }
 
