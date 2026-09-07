@@ -33,3 +33,14 @@ Exit status: 1
 Result: FAIL (test harness configuration: `build.gradle` specifies `Launcher` instead of `della.Launcher`)
 
 The UI test session stopped at the first failure as required.
+
+=== Test Case: Exit command (Storage refactoring verification) ===
+Input:
+bye
+Output:
+The GUI launched successfully and emitted JavaFX compatibility warnings,
+but the command-line input was not consumed because the application is GUI-based.
+The process was terminated after the GUI remained open.
+Exit status: terminated after UI launch
+Result: NOT COMPARABLE (the plan's expected command-line interaction does not
+match the configured GUI launcher)

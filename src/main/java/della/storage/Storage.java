@@ -20,6 +20,12 @@ import della.util.DateParser;
  * Stores tasks in and retrieves tasks from a file.
  */
 public class Storage {
+    private static final String TODO_TYPE = "T";
+    private static final String DEADLINE_TYPE = "D";
+    private static final String EVENT_TYPE = "E";
+    private static final String COMPLETED_STATUS = "1";
+    private static final String STORAGE_DATE_TIME_FORMAT = "MMM dd yyyy h:mma";
+
     private final String filePath;
 
     /**
@@ -67,28 +73,42 @@ public class Storage {
 
         try (Scanner scanner = new Scanner(storageFile)) {
             while (scanner.hasNext()) {
-                String taskLine = scanner.nextLine();
-                String[] taskParts = taskLine.split("\\|");
-                if (taskParts[0].equals("T")) {
-                    tasks.add(new Todo(taskParts[2], taskParts[1].equals("1")));
-                } else if (taskParts[0].equals("D")) {
-                    tasks.add(
-                            new Deadline(
-                                    taskParts[2],
-                                    taskParts[1].equals("1"),
-                                    DateParser.parseDateTime(taskParts[3], "MMM dd yyyy h:mma")));
-                } else {
-                    tasks.add(
-                            new Event(
-                                    taskParts[2],
-                                    taskParts[1].equals("1"),
-                                    DateParser.parseDateTime(taskParts[3], "MMM dd yyyy h:mma"),
-                                    DateParser.parseDateTime(taskParts[4], "MMM dd yyyy h:mma")));
-                }
+                tasks.add(parseTask(scanner.nextLine()));
             }
         }
 
         return tasks;
+    }
+
+    private Task parseTask(String taskLine) {
+        String[] taskParts = taskLine.split("\\|");
+        boolean isDone = taskParts[1].equals(COMPLETED_STATUS);
+
+        if (taskParts[0].equals(TODO_TYPE)) {
+            return new Todo(taskParts[2], isDone);
+        } else if (taskParts[0].equals(DEADLINE_TYPE)) {
+            return parseDeadline(taskParts, isDone);
+        } else if (taskParts[0].equals(EVENT_TYPE)) {
+            return parseEvent(taskParts, isDone);
+        } else {
+            throw new IllegalArgumentException(
+                    "Invalid task type in storage: " + taskParts[0]);
+        }
+    }
+
+    private Deadline parseDeadline(String[] taskParts, boolean isDone) {
+        return new Deadline(
+                taskParts[2],
+                isDone,
+                DateParser.parseDateTime(taskParts[3], STORAGE_DATE_TIME_FORMAT));
+    }
+
+    private Event parseEvent(String[] taskParts, boolean isDone) {
+        return new Event(
+                taskParts[2],
+                isDone,
+                DateParser.parseDateTime(taskParts[3], STORAGE_DATE_TIME_FORMAT),
+                DateParser.parseDateTime(taskParts[4], STORAGE_DATE_TIME_FORMAT));
     }
 
     /**
