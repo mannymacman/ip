@@ -2,6 +2,7 @@ package della.parser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import della.command.Command;
 import della.task.Deadline;
@@ -158,22 +159,7 @@ public class Parser {
         if (argument.isEmpty()) {
             throw new IllegalArgumentException("Cannot find nothing!");
         }
-
-        ArrayList<Task> res = new ArrayList<>();
-
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
-            String taskName = task.getName();
-            String[] nameParts = taskName.split("\\s+");
-            for (int j = 0; j < nameParts.length; j++) {
-                String part = nameParts[j];
-                if (part.equals(argument)) {
-                    res.add(task);
-                    break;
-                }
-            }
-        }
-
-        return res;
+        return new ArrayList<>(
+                tasks.stream().filter(task -> Arrays.asList(task.getName().split("\\s+")).contains(argument)).toList());
     }
 }
