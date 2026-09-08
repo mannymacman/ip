@@ -1,5 +1,7 @@
 package della.task;
 
+import java.util.Objects;
+
 /**
  * Represents a task with a name and completion status.
  */
@@ -61,5 +63,24 @@ public abstract class Task {
         } else {
             return String.format("[ ] %s", this.name);
         }
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
+        Task task = (Task) other;
+        return name.equals(task.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClass(), name);
     }
 }

@@ -31,9 +31,13 @@ public class TaskList {
      * Adds a task to the end of this task list.
      *
      * @param task Task to add.
+     * @throws IllegalArgumentException If task to be added is a duplicate.
      */
-    public void add(Task task) {
+    public void add(Task task) throws IllegalArgumentException {
         assert task != null : "Task list must not contain null tasks";
+        if (tasks.contains(task)) {
+            throw new IllegalArgumentException("Cannot add duplicate task!");
+        }
         tasks.add(task);
     }
 
