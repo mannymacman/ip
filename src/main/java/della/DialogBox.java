@@ -30,6 +30,9 @@ public class DialogBox extends HBox {
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
+
+            getStylesheets().add(
+                    MainWindow.class.getResource("/css/dialog-box.css").toExternalForm());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,6 +49,8 @@ public class DialogBox extends HBox {
         Collections.reverse(tmp);
         getChildren().setAll(tmp);
         setAlignment(Pos.TOP_LEFT);
+
+        dialog.getStyleClass().add("reply-label");
     }
 
     public static DialogBox getUserDialog(String text, Image img) {
