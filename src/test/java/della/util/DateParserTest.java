@@ -29,4 +29,10 @@ public class DateParserTest {
         assertThrows(
                 DateTimeParseException.class, () -> DateParser.parseDateTime("2026-08-26 14:30", "dd/MM/yyyy HH:mm"));
     }
+
+    @Test
+    public void printDateTime_validDateTime_formattedStringReturned() {
+        assertEquals("Aug 26 2026 2:30pm",
+                DateParser.printDateTime(LocalDateTime.of(2026, 8, 26, 14, 30)));
+    }
 }
