@@ -19,6 +19,7 @@ import della.ui.UI;
 public class Della {
     private final Storage storage;
     private TaskList taskList;
+    private Command command;
 
     /**
      * Creates Della using the specified file to persist tasks.
@@ -38,6 +39,10 @@ public class Della {
         } else {
             this.taskList = new TaskList();
         }
+    }
+
+    public Command getCommand() {
+        return command;
     }
 
     /**
@@ -63,8 +68,7 @@ public class Della {
      * @param input User input.
      */
     public String getResponse(String input) {
-        Command command = Parser.parseCommand(input);
-
+        command = Parser.parseCommand(input);
         return switch (command) {
             case BYE -> UI.showFarewell();
             case LIST -> UI.showTasks(taskList.getTasks());
