@@ -1,4 +1,5 @@
 package della;
+import della.command.Command;
 import della.ui.UI;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -26,18 +27,18 @@ public class MainWindow extends AnchorPane {
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.png"));
     private Image dellaImage = new Image(this.getClass().getResourceAsStream("/images/della.png"));
 
-    /** Injects the Della instance */
+    /** Injects the Della instance. */
     public void setDella(Della d) {
         this.della = d;
     }
 
     /**
-     * Creates dialog box that welcomes the user
+     * Creates dialog box that welcomes the user.
      */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-        dialogContainer.getChildren().add(DialogBox.getDukeDialog(UI.showWelcome(), dellaImage));
+        dialogContainer.getChildren().add(DialogBox.getDellaDialog(UI.showWelcome(), dellaImage, Command.BYE));
     }
 
 
@@ -50,9 +51,10 @@ public class MainWindow extends AnchorPane {
         assert della != null : "Della must be injected before handling user input";
         String input = userInput.getText();
         String response = della.getResponse(input);
+        Command command = della.getCommand();
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dellaImage)
+                DialogBox.getDellaDialog(response, dellaImage, command)
         );
         userInput.clear();
     }
