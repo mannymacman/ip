@@ -17,14 +17,19 @@ import della.ui.UI;
  * Runs the Della task-management application.
  */
 public class Della {
+    /** Stores tasks so that they can be persisted between application runs. */
     private final Storage storage;
+
+    /** Stores the tasks currently managed by Della. */
     private TaskList taskList;
+
+    /** Stores the command parsed from the most recent user input. */
     private Command command;
 
     /**
      * Creates Della using the specified file to persist tasks.
      *
-     * @param filePath Path of the task storage file.
+     * @param filePath the path of the task storage file.
      */
     public Della(String filePath) {
         this.storage = new Storage(filePath);
@@ -41,12 +46,17 @@ public class Della {
         }
     }
 
+    /**
+     * Returns the command parsed from the most recent user input.
+     *
+     * @return the most recently parsed command.
+     */
     public Command getCommand() {
         return command;
     }
 
     /**
-     * Runs the command-reading loop until the user enters the bye command.
+     * Runs the command-reading loop until the user enters the {@code bye} command.
      */
     public void run() {
         System.out.println(UI.showWelcome());
@@ -63,9 +73,10 @@ public class Della {
     }
 
     /**
-     * Generates a response for the user's chat message.
+     * Returns a response to the user's chat message and performs the corresponding task operation.
      *
-     * @param input User input.
+     * @param input the user's chat message.
+     * @return the response to display to the user.
      */
     public String getResponse(String input) {
         command = Parser.parseCommand(input);
@@ -81,6 +92,13 @@ public class Della {
         };
     }
 
+    /**
+     * Marks or unmarks the task specified in the user's input.
+     *
+     * @param input the user's command and task number.
+     * @param isMarking {@code true} to mark the task; {@code false} to unmark it.
+     * @return a success or error message for the operation.
+     */
     private String handleMark(String input, boolean isMarking) {
         try {
             int taskNum = Parser.parseTaskNumber(Parser.parseArguments(input));
@@ -98,6 +116,13 @@ public class Della {
         }
     }
 
+    /**
+     * Parses, stores, and adds a new task based on the specified add command.
+     *
+     * @param input the user's command and task details.
+     * @param command the type of task to add.
+     * @return a success or error message for the operation.
+     */
     private String handleAdd(String input, Command command) {
         try {
             String argument = Parser.parseArguments(input);
@@ -121,6 +146,12 @@ public class Della {
         }
     }
 
+    /**
+     * Deletes the task specified in the user's input from memory and storage.
+     *
+     * @param input the user's command and task number.
+     * @return a success or error message for the operation.
+     */
     private String handleDelete(String input) {
         try {
             int taskNum = Parser.parseTaskNumber(Parser.parseArguments(input));
@@ -138,6 +169,12 @@ public class Della {
         }
     }
 
+    /**
+     * Returns tasks whose descriptions match the search term in the user's input.
+     *
+     * @param input the user's find command and search term.
+     * @return the matching tasks or an error message.
+     */
     private String handleFind(String input) {
         try {
             ArrayList<Task> searchResult = Parser.parseFindTask(

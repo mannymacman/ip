@@ -27,13 +27,13 @@ public class MainWindow extends AnchorPane {
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.png"));
     private Image dellaImage = new Image(this.getClass().getResourceAsStream("/images/della.png"));
 
-    /** Injects the Della instance */
+    /** Injects the Della instance. */
     public void setDella(Della d) {
         this.della = d;
     }
 
     /**
-     * Creates dialog box that welcomes the user
+     * Creates dialog box that welcomes the user.
      */
     @FXML
     public void initialize() {

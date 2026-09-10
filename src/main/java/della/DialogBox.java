@@ -32,8 +32,8 @@ public class DialogBox extends HBox {
     /**
      * Creates a dialog box containing the specified message and speaker image.
      *
-     * @param text the message to display
-     * @param img the image to display beside the message
+     * @param text the message to display.
+     * @param img the image to display beside the message.
      */
     private DialogBox(String text, Image img) {
         try {
@@ -73,9 +73,9 @@ public class DialogBox extends HBox {
     /**
      * Returns a dialog box representing a user's message.
      *
-     * @param text the user's message
-     * @param img the image representing the user
-     * @return a right-aligned dialog box for the user's message
+     * @param text the user's message.
+     * @param img the image representing the user.
+     * @return a right-aligned dialog box for the user's message.
      */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
@@ -84,7 +84,7 @@ public class DialogBox extends HBox {
     /**
      * Changes the dialog label style based on the command type.
      *
-     * @param command the command that determines the response style
+     * @param command the command that determines the response style.
      */
     private void changeDialogStyle(Command command) {
         switch(command) {
@@ -108,10 +108,10 @@ public class DialogBox extends HBox {
     /**
      * Returns a dialog box representing Della's response.
      *
-     * @param text Della's response
-     * @param img the image representing Della
-     * @param command the command that determines the response style
-     * @return a left-aligned dialog box for Della's response
+     * @param text Della's response.
+     * @param img the image representing Della.
+     * @param command the command that determines the response style.
+     * @return a left-aligned dialog box for Della's response.
      */
     public static DialogBox getDellaDialog(String text, Image img, Command command) {
         var db = new DialogBox(text, img);
